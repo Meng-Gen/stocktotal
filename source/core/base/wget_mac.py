@@ -1,0 +1,1 @@
+import osdef wget(cmdline):    wget_cmdline = '''wget {cmdline}'''.format(cmdline=cmdline)    os.system(wget_cmdline)    

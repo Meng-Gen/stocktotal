@@ -1,0 +1,1 @@
+from . import insertion    class InsertionFactory():    @staticmethod    def insertion():        return insertion.Insertion()

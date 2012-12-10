@@ -1,0 +1,2711 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="StocktotalReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e10f98c9-fa56-4c1d-92cb-58a79a3b65db">
+	<property name="ireport.zoom" value="1.3286707500000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="672"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="negative red operating">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{operating} < 0]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="negative red investing">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{investing} < 0]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="negative red financing">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{financing} < 0]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="negative red free_cash_flow">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{free_cash_flow} < 0]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="negative red cash_flow">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{cash_flow} < 0]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="negative red net_profit">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{net_profit} < 0]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="negative red net_profit_minus_operating">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{net_profit_minus_operating} < 0]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="negative red inventory_index">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{inventory_index} < 0]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="negative red receivable_index">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{receivable_index} < 0]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="negative red gross_profit_index">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{gross_profit_index} < 0]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="negative red sga_index">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{sga_index} < 0]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="negative red payable_index">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{payable_index} < 0]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="red equity_ratio">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{equity_ratio} < 0.5]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="red liabilities_ratio">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{liabilities_ratio} > 0.5]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="red equity_multiplier">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{equity_multiplier} > 2]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="red current_ratio">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{current_ratio} < 2]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="red rapid_ratio">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{rapid_ratio} < 1]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="ROE Dataset" uuid="4233d94c-76a5-4422-97c8-3c347be0be3b">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from roe($P{STOCK_CODE})]]>
+		</queryString>
+		<field name="activity_date" class="java.sql.Date"/>
+		<field name="roe" class="java.lang.Double"/>
+		<field name="net_profit_margin" class="java.lang.Double"/>
+		<field name="total_assets_turnover" class="java.lang.Double"/>
+		<field name="equity_multiplier" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Financial Structure Dataset" uuid="f86986e8-8d1f-4834-8d78-c69f5d47ab4e">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from financial_structure($P{STOCK_CODE})]]>
+		</queryString>
+		<field name="activity_date" class="java.sql.Date"/>
+		<field name="equity_ratio" class="java.lang.Double"/>
+		<field name="liabilities_ratio" class="java.lang.Double"/>
+		<field name="equity_multiplier" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Current and Rapid Ratio Dataset" uuid="973e4d35-604c-42c7-abac-1e2d998abc31">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from current_and_rapid_ratio($P{STOCK_CODE})]]>
+		</queryString>
+		<field name="activity_date" class="java.sql.Date"/>
+		<field name="current_ratio" class="java.lang.Double"/>
+		<field name="rapid_ratio" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Non-operating Income Dataset" uuid="52ef16f0-c0e4-4a75-b498-eb267b1bdb85">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from nonoperating_income($P{STOCK_CODE})]]>
+		</queryString>
+		<field name="activity_date" class="java.sql.Date"/>
+		<field name="non_operating_income_ratio" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Long Term Investments Dataset" uuid="7190a26b-d1d4-4a92-92f9-49b9857bff56">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from long_term_investments($P{STOCK_CODE})]]>
+		</queryString>
+		<field name="activity_date" class="java.sql.Date"/>
+		<field name="long_term_investments" class="java.lang.Double"/>
+		<field name="assets" class="java.lang.Double"/>
+		<field name="long_term_investments_ratio" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Cash Flow Dataset" uuid="eea0a660-bc5a-4f9b-b1e2-a5f6e5056414">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from cash_flow($P{STOCK_CODE})]]>
+		</queryString>
+		<field name="activity_date" class="java.sql.Date"/>
+		<field name="operating" class="java.lang.Double"/>
+		<field name="investing" class="java.lang.Double"/>
+		<field name="financing" class="java.lang.Double"/>
+		<field name="free_cash_flow" class="java.lang.Double"/>
+		<field name="cash_flow" class="java.lang.Double"/>
+		<field name="net_profit" class="java.lang.Double"/>
+		<field name="net_profit_minus_operating" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Profit Margin Dataset" uuid="c79fd1b9-5d87-4f88-bf36-211a0c50b7cc">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from profit_margin($P{STOCK_CODE})]]>
+		</queryString>
+		<field name="activity_date" class="java.sql.Date"/>
+		<field name="gross_profit_margin" class="java.lang.Double"/>
+		<field name="operating_profit_margin" class="java.lang.Double"/>
+		<field name="net_profit_margin" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Operating Income Dataset" uuid="fbca44fb-567d-43b6-8184-143ca1299969">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from operating_income($P{STOCK_CODE})]]>
+		</queryString>
+		<field name="activity_date" class="java.sql.Date"/>
+		<field name="income" class="java.lang.Double"/>
+		<field name="income_yoy" class="java.lang.Double"/>
+		<field name="accumlated_income" class="java.lang.Double"/>
+		<field name="accumlated_income_yoy" class="java.lang.Double"/>
+		<field name="ma3_income" class="java.lang.Double"/>
+		<field name="ma12_income" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="CCC Dataset" uuid="a6f6d7d2-eb2e-451f-9750-692ebd65a5bb">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from ccc($P{STOCK_CODE})]]>
+		</queryString>
+		<field name="activity_date" class="java.sql.Date"/>
+		<field name="days_inventory_outstanding" class="java.lang.Double"/>
+		<field name="days_sales_outstanding" class="java.lang.Double"/>
+		<field name="days_payable_outstanding" class="java.lang.Double"/>
+		<field name="ccc" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Evaluation Index Dataset" uuid="aa66a003-384c-4638-ba34-49c02c285a85">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from evaluation_index($P{STOCK_CODE})]]>
+		</queryString>
+		<field name="activity_date" class="java.sql.Date"/>
+		<field name="inventory_growth" class="java.lang.Double"/>
+		<field name="receivables_growth" class="java.lang.Double"/>
+		<field name="gross_profit_growth" class="java.lang.Double"/>
+		<field name="sga_growth" class="java.lang.Double"/>
+		<field name="payables_growth" class="java.lang.Double"/>
+		<field name="operating_income_growth" class="java.lang.Double"/>
+		<field name="inventory_index" class="java.lang.Double"/>
+		<field name="receivable_index" class="java.lang.Double"/>
+		<field name="gross_profit_index" class="java.lang.Double"/>
+		<field name="sga_index" class="java.lang.Double"/>
+		<field name="payable_index" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Stock Dividend Dataset" uuid="c1eaa7b8-4ba4-404f-8025-dbcabc502aba">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from stock_dividend($P{STOCK_CODE})]]>
+		</queryString>
+		<field name="activity_date" class="java.sql.Date"/>
+		<field name="cash_dividend" class="java.lang.Double"/>
+		<field name="stock_dividend_from_retained_earnings" class="java.lang.Double"/>
+		<field name="stock_dividend_from_capital_reserve" class="java.lang.Double"/>
+		<field name="stock_dividend" class="java.lang.Double"/>
+		<field name="total_dividend" class="java.lang.Double"/>
+		<field name="profit_sharing_percentage" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Capital Structure Summary Dataset" uuid="4e2a1c80-9e24-47a9-8035-986833bcce9a">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from capital_structure_summary($P{STOCK_CODE})]]>
+		</queryString>
+		<field name="activity_date" class="java.sql.Date"/>
+		<field name="spo" class="java.lang.Double"/>
+		<field name="spo_ratio" class="java.lang.Double"/>
+		<field name="capitalization_earnings" class="java.lang.Double"/>
+		<field name="capitalization_earnings_ratio" class="java.lang.Double"/>
+		<field name="capitalization_reserve_and_others" class="java.lang.Double"/>
+		<field name="capitalization_reserve_and_others_ratio" class="java.lang.Double"/>
+	</subDataset>
+	<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[select 1 as dummy_field]]>
+	</queryString>
+	<field name="dummy_field" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="132" splitType="Stretch">
+			<textField>
+				<reportElement uuid="548b8c45-2324-4ea1-a4ec-b16b8bbcc64b" x="0" y="0" width="248" height="58"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="36" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{STOCK_CODE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="aa255bb3-2a82-43f6-be76-e6f31cbf482d" positionType="Float" x="248" y="0" width="307" height="58"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="標楷體" size="36" isBold="true"/>
+					<paragraph leftIndent="-20"/>
+				</textElement>
+				<text><![CDATA[ 財報分析]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ece830a8-b5a3-4c55-84fa-7bf712aeb57f" positionType="Float" x="368" y="89" width="187" height="20"/>
+				<textElement>
+					<font size="8" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Bug Reporting: Plover Tsai <plover@gmail.com>]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="516" splitType="Stretch">
+			<multiAxisChart>
+				<chart>
+					<reportElement uuid="7b41a528-c32b-40e9-874b-8567dbbd82ea" x="0" y="0" width="494" height="215"/>
+					<chartTitle color="#000000">
+						<font size="14" isBold="true"/>
+						<titleExpression><![CDATA["ROE細部邏輯關聯分析圖"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<multiAxisPlot>
+					<plot/>
+					<axis position="leftOrTop">
+						<timeSeriesChart>
+							<chart>
+								<reportElement uuid="bf59b0f6-8bba-4d15-9d57-25f2d4a83d85" positionType="Float" x="0" y="0" width="0" height="0" backcolor="#FFFFFF"/>
+								<chartTitle color="#000000">
+									<font size="14" isBold="true"/>
+									<titleExpression><![CDATA["ROE細部邏輯關聯分析圖"]]></titleExpression>
+								</chartTitle>
+								<chartSubtitle color="#000000"/>
+								<chartLegend textColor="#000000" backgroundColor="#FFFFFF"/>
+							</chart>
+							<timeSeriesDataset timePeriod="Quarter">
+								<dataset>
+									<datasetRun subDataset="ROE Dataset" uuid="bed945b4-fe00-417c-9624-e6ef6acffe21"/>
+								</dataset>
+								<timeSeries>
+									<seriesExpression><![CDATA["ROE"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{roe}]]></valueExpression>
+								</timeSeries>
+								<timeSeries>
+									<seriesExpression><![CDATA["純益率"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{net_profit_margin}]]></valueExpression>
+								</timeSeries>
+								<timeSeries>
+									<seriesExpression><![CDATA["總資產週轉率"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{total_assets_turnover}]]></valueExpression>
+								</timeSeries>
+							</timeSeriesDataset>
+							<timeSeriesPlot>
+								<plot/>
+								<valueAxisLabelExpression><![CDATA["ROE、純益率、總資產週轉率"]]></valueAxisLabelExpression>
+							</timeSeriesPlot>
+						</timeSeriesChart>
+					</axis>
+					<axis position="rightOrBottom">
+						<timeSeriesChart>
+							<chart>
+								<reportElement uuid="f96f6529-d7e0-43c3-9a98-60c585f31966" positionType="Float" x="0" y="0" width="0" height="0" backcolor="#FFFFFF"/>
+								<chartTitle color="#000000">
+									<font size="14" isBold="true"/>
+									<titleExpression><![CDATA["ROE細部邏輯關聯分析圖"]]></titleExpression>
+								</chartTitle>
+								<chartSubtitle color="#000000"/>
+								<chartLegend textColor="#000000" backgroundColor="#FFFFFF"/>
+							</chart>
+							<timeSeriesDataset timePeriod="Quarter">
+								<dataset>
+									<datasetRun subDataset="ROE Dataset" uuid="94fa23af-866c-4746-9ede-b8fb1f764678"/>
+								</dataset>
+								<timeSeries>
+									<seriesExpression><![CDATA["權益乘數"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{equity_multiplier}]]></valueExpression>
+								</timeSeries>
+							</timeSeriesDataset>
+							<timeSeriesPlot>
+								<plot/>
+								<valueAxisLabelExpression><![CDATA["權益乘數"]]></valueAxisLabelExpression>
+							</timeSeriesPlot>
+						</timeSeriesChart>
+					</axis>
+				</multiAxisPlot>
+			</multiAxisChart>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="0" y="246" width="162" height="20" forecolor="#FF0000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="true"/>
+				</textElement>
+				<text><![CDATA[公司類型]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="0" y="266" width="162" height="20" forecolor="#FF0000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[A. 積極型高成長（最佳一）]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="0" y="306" width="162" height="20" forecolor="#FF0000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[C. 獲利好轉（次佳）]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="0" y="286" width="162" height="20" forecolor="#FF0000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[B. 穩健型高成長（最佳二）]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="0" y="326" width="162" height="20" forecolor="#FF0000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[D. 短期獲利好轉長期有隱憂]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="0" y="346" width="162" height="20" forecolor="#FF0000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[E. 獲利平穩但成熟型公司]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="0" y="366" width="162" height="20" forecolor="#FF0000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[F. 獲利轉差公司]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="0" y="386" width="162" height="20" forecolor="#FF0000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[G. 經營可能陷入困境]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="162" y="246" width="71" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[ROE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="162" y="266" width="71" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[向上]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="162" y="306" width="71" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[向上]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="162" y="286" width="71" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[向上]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="162" y="326" width="71" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[向上]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="162" y="346" width="71" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[平平]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="162" y="386" width="71" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[向下]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="162" y="366" width="71" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[向下]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="233" y="246" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[純益率]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="320" y="246" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[總資產週轉率]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="407" y="246" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[權益乘數]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="233" y="266" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[趨勢向上]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="233" y="286" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[趨勢向上]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="233" y="306" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[趨勢向上]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="233" y="326" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[趨勢向上]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="233" y="346" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[趨勢緩下]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="233" y="366" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[趨勢緩下]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="233" y="386" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[趨勢向下]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="320" y="266" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[趨勢向上]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="320" y="286" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[趨勢向上]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="407" y="266" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[提高]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="320" y="306" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[趨勢平平]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="320" y="326" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[趨勢向下]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="320" y="366" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[趨勢平平]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="320" y="346" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[趨勢向上]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="320" y="386" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[趨勢向下]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="407" y="306" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[提高]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="407" y="386" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[提高]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="407" y="326" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[提高]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="407" y="346" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[平平]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="407" y="366" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[平平]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd2c3c18-1ef5-494f-aae2-3f8457ddbbb2" x="407" y="286" width="87" height="20" forecolor="#000000"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[降低]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="42febf76-4d95-4975-9fc9-546f2f261d7f" key="table 1" style="table" positionType="Float" x="0" y="434" width="360" height="50"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="ROE Dataset" uuid="21856328-3989-4bee-b795-41ccd6e1e374">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="54" uuid="ca834898-a7ef-4a13-965c-eb4be4140e14">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="373662c1-c503-42b9-8b17-3ab78deb6f5f" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[日期]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="yyyy-MM">
+								<reportElement uuid="33ccf219-cfb7-49f4-8ad3-4f96083a6c8b" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{activity_date}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="befbeb2f-3581-4ff5-9639-11b1ea1323f5">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="1e92cf70-9c45-488d-899e-330837467a3f" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[ROE]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00">
+								<reportElement uuid="248c31b3-6186-46b7-b1a2-31d0618e9fbd" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{roe}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="41d7c0e1-f82d-4b2e-9130-905437846bdd">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="a3ad2500-d3b5-4245-a8de-5244ed8015d0" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[純益率]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00">
+								<reportElement uuid="524bbc12-d283-4c46-83ca-f8fdb96c0c90" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{net_profit_margin}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="29c218d4-3252-4335-959c-88cd7b18a4a2">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="b05d0043-a4fe-498f-86e3-43348f852b43" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[總資產周轉率]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00">
+								<reportElement uuid="878dc9ba-d8e6-4a2b-bba0-63cfd5a8e8bb" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{total_assets_turnover}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="b71fa04f-6702-4316-a5c3-8ce754ead7b5">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="0bc06b86-d6ed-4f5d-a38e-354f9bbdfcc5" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[權益乘數]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00">
+								<reportElement uuid="aea81a51-4ce9-4053-b38a-db00d6b8050d" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{equity_multiplier}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="328">
+			<multiAxisChart>
+				<chart>
+					<reportElement uuid="d77fe265-b4c7-4c90-84a8-361a82e242d1" x="0" y="0" width="494" height="215"/>
+					<chartTitle color="#000000">
+						<font size="14" isBold="true"/>
+						<titleExpression><![CDATA["財務結構構造圖"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<multiAxisPlot>
+					<plot/>
+					<axis>
+						<timeSeriesChart>
+							<chart>
+								<reportElement uuid="376fcb00-e7d1-47cf-9fc5-9a72cfd16ce9" x="0" y="0" width="0" height="0" backcolor="#FFFFFF"/>
+								<chartTitle color="#000000">
+									<font size="14" isBold="true"/>
+									<titleExpression><![CDATA["財務結構構造圖"]]></titleExpression>
+								</chartTitle>
+								<chartSubtitle color="#000000"/>
+								<chartLegend textColor="#000000" backgroundColor="#FFFFFF"/>
+							</chart>
+							<timeSeriesDataset timePeriod="Quarter">
+								<dataset>
+									<datasetRun subDataset="Financial Structure Dataset" uuid="a4f1aa97-12db-44a5-852d-9945c46af563"/>
+								</dataset>
+								<timeSeries>
+									<seriesExpression><![CDATA["自有資本比率"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{equity_ratio}]]></valueExpression>
+								</timeSeries>
+								<timeSeries>
+									<seriesExpression><![CDATA["負債比率"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{liabilities_ratio}]]></valueExpression>
+								</timeSeries>
+							</timeSeriesDataset>
+							<timeSeriesPlot>
+								<plot/>
+								<valueAxisLabelExpression><![CDATA["自有資本與負債比率"]]></valueAxisLabelExpression>
+							</timeSeriesPlot>
+						</timeSeriesChart>
+					</axis>
+					<axis position="rightOrBottom">
+						<timeSeriesChart>
+							<chart>
+								<reportElement uuid="74cc7153-2762-4de8-833a-a5c7f98f1d97" x="0" y="0" width="0" height="0" backcolor="#FFFFFF"/>
+								<chartTitle color="#000000">
+									<font size="14" isBold="true"/>
+									<titleExpression><![CDATA["財務結構構造圖"]]></titleExpression>
+								</chartTitle>
+								<chartSubtitle color="#000000"/>
+								<chartLegend textColor="#000000" backgroundColor="#FFFFFF"/>
+							</chart>
+							<timeSeriesDataset timePeriod="Quarter">
+								<dataset>
+									<datasetRun subDataset="Financial Structure Dataset" uuid="a741ae3e-0af6-4206-ada6-283cebd7a894"/>
+								</dataset>
+								<timeSeries>
+									<seriesExpression><![CDATA["權益乘數"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{equity_multiplier}]]></valueExpression>
+								</timeSeries>
+							</timeSeriesDataset>
+							<timeSeriesPlot>
+								<plot/>
+								<valueAxisLabelExpression><![CDATA["權益乘數"]]></valueAxisLabelExpression>
+							</timeSeriesPlot>
+						</timeSeriesChart>
+					</axis>
+				</multiAxisPlot>
+			</multiAxisChart>
+			<componentElement>
+				<reportElement uuid="20da6687-e36f-4b3c-a0be-9c691deeeeac" key="table 7" style="table" positionType="Float" x="0" y="243" width="360" height="50"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Financial Structure Dataset" uuid="5804e9aa-5314-485a-87b8-ca27759fbc17">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="70" uuid="04562140-8ebb-4c66-8000-c3909a9cde0e">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="5511c8b9-c234-403b-b118-d86a8b45066c" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[日期]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="yyyy-MM">
+								<reportElement uuid="4a2239ce-b132-4756-84e6-1803003858fe" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{activity_date}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="0233fa98-3c9a-4e51-913a-e1d3659a0dbf">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="9007146a-89a0-4784-9554-355089eead36" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[自有資本比率]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="#,##0.00 %">
+								<reportElement uuid="f8baa5e6-9176-4370-8f6f-2b6b488653c3" style="red equity_ratio" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{equity_ratio}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="a783009c-e5b0-4a82-880a-08005a02714e">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="86168880-8395-43cc-b9a2-51c3e25c2a04" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[負債比率]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="#,##0.00 %">
+								<reportElement uuid="25823f22-927e-4607-aa42-e9d67bb147d4" style="red liabilities_ratio" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{liabilities_ratio}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="a1982a05-a127-4d46-94c8-5c68ee5da527">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="e1286279-ba89-4ab2-bd83-fa8d7e601cdd" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[權益乘數]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="###0.00">
+								<reportElement uuid="27ab758d-0ff9-4d37-8002-99a96b9b28fa" style="red equity_multiplier" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{equity_multiplier}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="327">
+			<multiAxisChart>
+				<chart>
+					<reportElement uuid="f9156419-92f0-4b93-b792-fa4004ef6d09" positionType="Float" x="0" y="0" width="449" height="215"/>
+					<chartTitle color="#000000">
+						<font size="14" isBold="true"/>
+						<titleExpression><![CDATA["流動比率與速動比率"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<multiAxisPlot>
+					<plot/>
+					<axis>
+						<timeSeriesChart>
+							<chart>
+								<reportElement uuid="efa2f137-370d-4c51-8d2d-0a0099f716ef" x="0" y="0" width="0" height="0" backcolor="#FFFFFF"/>
+								<chartTitle color="#000000">
+									<font size="14" isBold="true"/>
+									<titleExpression><![CDATA["流動比率與速動比率"]]></titleExpression>
+								</chartTitle>
+								<chartSubtitle color="#000000"/>
+								<chartLegend textColor="#000000" backgroundColor="#FFFFFF"/>
+							</chart>
+							<timeSeriesDataset timePeriod="Quarter">
+								<dataset>
+									<datasetRun subDataset="Current and Rapid Ratio Dataset" uuid="c2100e0d-49b9-45d1-a948-613441a587d0"/>
+								</dataset>
+								<timeSeries>
+									<seriesExpression><![CDATA["流動比率"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{current_ratio}]]></valueExpression>
+								</timeSeries>
+								<timeSeries>
+									<seriesExpression><![CDATA["速動比率"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{rapid_ratio}]]></valueExpression>
+								</timeSeries>
+							</timeSeriesDataset>
+							<timeSeriesPlot>
+								<plot/>
+							</timeSeriesPlot>
+						</timeSeriesChart>
+					</axis>
+				</multiAxisPlot>
+			</multiAxisChart>
+			<componentElement>
+				<reportElement uuid="5088483a-1e4c-4b4a-8b28-899e34e06d89" key="table 1" style="table" x="0" y="245" width="360" height="50"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Current and Rapid Ratio Dataset" uuid="c2a811bf-441f-45e0-b00a-67bdc9fcb6e8">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="70" uuid="87f0f686-bceb-479d-8316-daaa7118645c">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="cee96eba-0f11-455a-8dca-77fc7dbddeb9" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[日期]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="yyyy-MM">
+								<reportElement uuid="08e32cbd-3b4b-4d8b-b8b5-4d5bba653c99" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{activity_date}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="02a3a853-6d70-4627-b0eb-94b0583d3179">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="b6c327f3-7e8e-4e69-b331-6b38a361ad0b" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[流動比率]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00;-###0.00">
+								<reportElement uuid="752b89e1-02f8-43f9-a2e6-02e995e7ad13" style="red current_ratio" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{current_ratio}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="4f6cf3aa-2484-41b2-832e-8eb63fbd4abb">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="f450d1ff-0e93-44f1-a965-7f24ca6a23c9" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[速動比率]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00;-###0.00">
+								<reportElement uuid="fd88c93d-b89d-4f08-997f-98976539f3e5" style="red rapid_ratio" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{rapid_ratio}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="250">
+			<multiAxisChart>
+				<chart>
+					<reportElement uuid="85e04039-ccf2-4607-9745-2978f4596faf" x="0" y="0" width="449" height="215"/>
+					<chartTitle color="#000000">
+						<font size="14" isBold="true"/>
+						<titleExpression><![CDATA["營業外收支比率"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<multiAxisPlot>
+					<plot/>
+					<axis>
+						<timeSeriesChart>
+							<chart>
+								<reportElement uuid="37e95e24-c38a-41e6-b05f-aaa967975706" x="0" y="0" width="0" height="0" backcolor="#FFFFFF"/>
+								<chartTitle color="#000000">
+									<font size="14" isBold="true"/>
+									<titleExpression><![CDATA["營業外收支比率"]]></titleExpression>
+								</chartTitle>
+								<chartSubtitle color="#000000"/>
+								<chartLegend textColor="#000000" backgroundColor="#FFFFFF"/>
+							</chart>
+							<timeSeriesDataset timePeriod="Quarter">
+								<dataset>
+									<datasetRun subDataset="Non-operating Income Dataset" uuid="6fe70b32-a34f-4e74-9f5d-37e07f5be780"/>
+								</dataset>
+								<timeSeries>
+									<seriesExpression><![CDATA["營業外收支比率"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{non_operating_income_ratio}]]></valueExpression>
+								</timeSeries>
+							</timeSeriesDataset>
+							<timeSeriesPlot>
+								<plot/>
+							</timeSeriesPlot>
+						</timeSeriesChart>
+					</axis>
+				</multiAxisPlot>
+			</multiAxisChart>
+		</band>
+		<band height="250">
+			<multiAxisChart>
+				<chart>
+					<reportElement uuid="914807eb-7210-4df9-b105-01471e154b6e" x="0" y="0" width="449" height="215"/>
+					<chartTitle color="#000000">
+						<font size="14" isBold="true"/>
+						<titleExpression><![CDATA["長期投資比率"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<multiAxisPlot>
+					<plot/>
+					<axis>
+						<timeSeriesChart>
+							<chart>
+								<reportElement uuid="7dd4acfe-5ff8-46bc-a987-18b7841db013" x="0" y="0" width="0" height="0" backcolor="#FFFFFF"/>
+								<chartTitle color="#000000">
+									<font size="14" isBold="true"/>
+									<titleExpression><![CDATA["長期投資比率"]]></titleExpression>
+								</chartTitle>
+								<chartSubtitle color="#000000"/>
+								<chartLegend textColor="#000000" backgroundColor="#FFFFFF"/>
+							</chart>
+							<timeSeriesDataset timePeriod="Quarter">
+								<dataset>
+									<datasetRun subDataset="Long Term Investments Dataset" uuid="20430596-fcaa-40b9-adf2-10e85956b587"/>
+								</dataset>
+								<timeSeries>
+									<seriesExpression><![CDATA["長期投資比率"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{long_term_investments_ratio}]]></valueExpression>
+								</timeSeries>
+							</timeSeriesDataset>
+							<timeSeriesPlot>
+								<plot/>
+							</timeSeriesPlot>
+						</timeSeriesChart>
+					</axis>
+				</multiAxisPlot>
+			</multiAxisChart>
+		</band>
+		<band height="243">
+			<timeSeriesChart>
+				<chart>
+					<reportElement uuid="fe86a0c6-5450-4b69-ba9c-47b5ebac13fb" x="0" y="0" width="555" height="223"/>
+					<chartTitle>
+						<font size="14" isBold="true"/>
+						<titleExpression><![CDATA["平均月營收比較"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<timeSeriesDataset timePeriod="Month">
+					<dataset>
+						<datasetRun subDataset="Operating Income Dataset" uuid="e40919a0-71e5-4a81-995d-3978c951d350"/>
+					</dataset>
+					<timeSeries>
+						<seriesExpression><![CDATA["3個月平均月營收"]]></seriesExpression>
+						<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+						<valueExpression><![CDATA[$F{ma3_income}]]></valueExpression>
+					</timeSeries>
+					<timeSeries>
+						<seriesExpression><![CDATA["12個月平均月營收"]]></seriesExpression>
+						<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+						<valueExpression><![CDATA[$F{ma12_income}]]></valueExpression>
+					</timeSeries>
+				</timeSeriesDataset>
+				<timeSeriesPlot isShowShapes="false">
+					<plot/>
+				</timeSeriesPlot>
+			</timeSeriesChart>
+		</band>
+		<band height="481">
+			<multiAxisChart>
+				<chart>
+					<reportElement uuid="f6c0ecfb-56fd-405f-8156-7c1dff678ad5" positionType="Float" x="0" y="0" width="555" height="215"/>
+					<chartTitle>
+						<font size="14" isBold="true"/>
+						<titleExpression><![CDATA["月營收與YoY"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<multiAxisPlot>
+					<plot/>
+					<axis>
+						<timeSeriesChart>
+							<chart>
+								<reportElement uuid="9cd96a8d-d60f-450e-9c2c-52c405fe69ea" positionType="Float" x="0" y="0" width="0" height="0" backcolor="#FFFFFF"/>
+								<chartTitle color="#000000">
+									<font size="14" isBold="true"/>
+									<titleExpression><![CDATA["月營收與YoY"]]></titleExpression>
+								</chartTitle>
+								<chartSubtitle color="#000000"/>
+								<chartLegend textColor="#000000" backgroundColor="#FFFFFF"/>
+							</chart>
+							<timeSeriesDataset timePeriod="Month">
+								<dataset>
+									<datasetRun subDataset="Operating Income Dataset" uuid="daf2d4c7-91fa-44e8-88f4-6c01c7244eb5"/>
+								</dataset>
+								<timeSeries>
+									<seriesExpression><![CDATA["月營收"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{income}]]></valueExpression>
+								</timeSeries>
+							</timeSeriesDataset>
+							<timeSeriesPlot isShowShapes="false">
+								<plot/>
+							</timeSeriesPlot>
+						</timeSeriesChart>
+					</axis>
+					<axis position="rightOrBottom">
+						<timeSeriesChart>
+							<chart>
+								<reportElement uuid="dae87aac-2c22-45d0-bc1c-384a7ac9f066" positionType="Float" x="0" y="0" width="0" height="0" backcolor="#FFFFFF"/>
+								<chartTitle color="#000000">
+									<font size="14" isBold="true"/>
+									<titleExpression><![CDATA["月營收與YoY"]]></titleExpression>
+								</chartTitle>
+								<chartSubtitle color="#000000"/>
+								<chartLegend textColor="#000000" backgroundColor="#FFFFFF"/>
+							</chart>
+							<timeSeriesDataset timePeriod="Month">
+								<dataset>
+									<datasetRun subDataset="Operating Income Dataset" uuid="e8f3d143-894d-47e3-b429-b1c5fc469254"/>
+								</dataset>
+								<timeSeries>
+									<seriesExpression><![CDATA["年增率"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{income_yoy}]]></valueExpression>
+								</timeSeries>
+							</timeSeriesDataset>
+							<timeSeriesPlot isShowLines="true" isShowShapes="false">
+								<plot/>
+							</timeSeriesPlot>
+						</timeSeriesChart>
+					</axis>
+				</multiAxisPlot>
+			</multiAxisChart>
+			<multiAxisChart>
+				<chart>
+					<reportElement uuid="c71df538-4123-4c7e-b4a9-cc32ec2532e4" x="0" y="238" width="555" height="215"/>
+					<chartTitle>
+						<font size="14" isBold="true"/>
+						<titleExpression><![CDATA["累積月營收YoY"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<multiAxisPlot>
+					<plot/>
+					<axis position="leftOrTop">
+						<timeSeriesChart>
+							<chart>
+								<reportElement uuid="bdcc94ed-cb82-412c-a2a3-907faf23325b" x="0" y="0" width="0" height="0" backcolor="#FFFFFF"/>
+								<chartTitle color="#000000">
+									<font size="14" isBold="true"/>
+									<titleExpression><![CDATA["累積月營收YoY"]]></titleExpression>
+								</chartTitle>
+								<chartSubtitle color="#000000"/>
+								<chartLegend textColor="#000000" backgroundColor="#FFFFFF"/>
+							</chart>
+							<timeSeriesDataset timePeriod="Month">
+								<dataset>
+									<datasetRun subDataset="Operating Income Dataset" uuid="6af3d666-2d81-4b72-b762-e0c40c62e3d6"/>
+								</dataset>
+								<timeSeries>
+									<seriesExpression><![CDATA["YoY"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{accumlated_income_yoy}]]></valueExpression>
+								</timeSeries>
+							</timeSeriesDataset>
+							<timeSeriesPlot isShowShapes="false">
+								<plot/>
+							</timeSeriesPlot>
+						</timeSeriesChart>
+					</axis>
+				</multiAxisPlot>
+			</multiAxisChart>
+		</band>
+		<band height="240">
+			<multiAxisChart>
+				<chart>
+					<reportElement uuid="4205aa56-5112-4694-968e-f248c9a7d3a6" x="0" y="0" width="449" height="215"/>
+					<chartTitle color="#000000">
+						<font size="14" isBold="true"/>
+						<titleExpression><![CDATA["三大獲利能力"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<multiAxisPlot>
+					<plot/>
+					<axis>
+						<timeSeriesChart>
+							<chart>
+								<reportElement uuid="31991ff6-dc55-41c3-918e-778025e0ebb6" x="0" y="0" width="0" height="0" backcolor="#FFFFFF"/>
+								<chartTitle color="#000000">
+									<font size="14" isBold="true"/>
+									<titleExpression><![CDATA["三大獲利能力"]]></titleExpression>
+								</chartTitle>
+								<chartSubtitle color="#000000"/>
+								<chartLegend textColor="#000000" backgroundColor="#FFFFFF"/>
+							</chart>
+							<timeSeriesDataset timePeriod="Quarter">
+								<dataset>
+									<datasetRun subDataset="Profit Margin Dataset" uuid="eaeb8bf0-8431-424a-9314-741c9cf7a90b"/>
+								</dataset>
+								<timeSeries>
+									<seriesExpression><![CDATA["毛利率"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{gross_profit_margin}]]></valueExpression>
+								</timeSeries>
+								<timeSeries>
+									<seriesExpression><![CDATA["營益率"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{operating_profit_margin}]]></valueExpression>
+								</timeSeries>
+								<timeSeries>
+									<seriesExpression><![CDATA["盈利率"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{net_profit_margin}]]></valueExpression>
+								</timeSeries>
+							</timeSeriesDataset>
+							<timeSeriesPlot>
+								<plot/>
+							</timeSeriesPlot>
+						</timeSeriesChart>
+					</axis>
+				</multiAxisPlot>
+			</multiAxisChart>
+		</band>
+		<band height="284">
+			<staticText>
+				<reportElement uuid="9ef3dceb-a243-442e-af1f-51a1a5daaca7" x="0" y="0" width="555" height="36"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[年現金流量表]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="5da58028-9ec0-4826-9e85-57b2d8b64ede" key="table 3" style="table" positionType="Float" x="0" y="51" width="555" height="50"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Cash Flow Dataset" uuid="a0c0f4e7-d0b1-4edd-97b6-86031b9aac86">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="70" uuid="6960f914-0797-401d-88e8-3a2c0edf91a0">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="7072f493-df85-43e4-9f87-091e4b392a31" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[日期]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="yyyy-MM">
+								<reportElement uuid="11515a5a-d1ac-4cdf-9026-5a5ea9cff793" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{activity_date}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="ecdd16b0-760a-4dca-8e33-35ef2ff1e649">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="5c36b4f6-d1d5-43f7-ae66-2b77bb58c292" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[營業活動]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="#,##0;-#,##0">
+								<reportElement uuid="f5aec84a-d192-4fab-807c-bb7f35ccb37e" style="negative red operating" x="0" y="0" width="69" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{operating}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="3a2c30e9-26ce-4f79-987e-0d8c3741ff4f">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="142c2058-34e2-418f-acff-5247b1e8819b" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[投資活動]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="#,##0;-#,##0">
+								<reportElement uuid="be9abbb0-2569-4d5f-9388-301029f8b39c" style="negative red investing" x="0" y="0" width="69" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{investing}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="2c5fd405-490e-479a-b680-fd768236deef">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="72c59a9a-c9df-4169-987a-e80c9a4ba554" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="false"/>
+								</textElement>
+								<text><![CDATA[融資活動]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="#,##0;-#,##0">
+								<reportElement uuid="fbc0cfd7-a727-4a0f-917b-9b93ec93e2ea" style="negative red financing" x="0" y="0" width="69" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{financing}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="4931d936-6f71-430b-87d4-78f8532c2f33">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="51036f04-dfcb-41ad-874f-77f70acda6d9" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[自由現金流量]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="#,##0;-#,##0">
+								<reportElement uuid="e28fbfae-64a6-4077-904c-cf9bf2239a0d" style="negative red free_cash_flow" x="0" y="0" width="69" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{free_cash_flow}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="eb078496-fc3e-42aa-9941-8b5c8a8e280c">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="c11a84c0-cd51-4bb0-b1e9-22f9957c6bf4" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="false"/>
+								</textElement>
+								<text><![CDATA[本期現金及約當現金增加數]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="#,##0;-#,##0">
+								<reportElement uuid="86a6bf2e-578d-40ae-b3af-acc99df5e0c8" style="negative red cash_flow" x="0" y="0" width="69" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{cash_flow}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="1b2ac7f0-3aec-4d09-ab45-099414a89e19">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="15552db4-f067-4cb9-8221-1ee041966569" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="false"/>
+								</textElement>
+								<text><![CDATA[會計盈餘]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="#,##0;-#,##0">
+								<reportElement uuid="0a1b0436-c1f4-4791-9750-63efb9c83399" style="negative red net_profit" x="0" y="0" width="69" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{net_profit}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="5d2898f7-eedf-453d-8d32-3365af722d0c">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="4511e595-722d-44cc-8862-64fe357dd779" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[會計盈餘與營業活動差額]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="#,##0;-#,##0">
+								<reportElement uuid="4f6951a7-decc-49e2-a036-d84a53c00544" style="negative red net_profit_minus_operating" x="0" y="0" width="69" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font isBold="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{net_profit_minus_operating}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="0" y="127" width="139" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="true"/>
+				</textElement>
+				<text><![CDATA[公司類型]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="0" y="147" width="139" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="true"/>
+				</textElement>
+				<text><![CDATA[A. 營運成長且財務穩健]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="0" y="167" width="139" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="true"/>
+				</textElement>
+				<text><![CDATA[B. 營運成長且積極投資]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="0" y="187" width="139" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="true"/>
+				</textElement>
+				<text><![CDATA[C. 本業趨緩且投資積極]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="0" y="207" width="139" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="true"/>
+				</textElement>
+				<text><![CDATA[D. 本業趨緩且投資保守]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="0" y="227" width="139" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="true"/>
+				</textElement>
+				<text><![CDATA[E. 本業轉差且投資停頓]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="139" y="127" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="true"/>
+				</textElement>
+				<text><![CDATA[營業活動]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="233" y="127" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="true"/>
+				</textElement>
+				<text><![CDATA[投資活動]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="327" y="127" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="true"/>
+				</textElement>
+				<text><![CDATA[理財活動]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="139" y="147" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[正數]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="139" y="167" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[正數]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="139" y="187" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[負數]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="139" y="207" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[負數]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="139" y="227" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[負數]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="233" y="147" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[負數]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="233" y="167" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[負數]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="233" y="187" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[負數]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="233" y="227" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[正數]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="233" y="207" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[正數]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="327" y="147" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[負數]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="327" y="167" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[正數]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="327" y="187" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[正數]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="327" y="207" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[平平]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1790ee9e-3bb1-493c-9e7f-9a40577d18c0" positionType="Float" x="327" y="227" width="94" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" isBold="false"/>
+				</textElement>
+				<text><![CDATA[正數]]></text>
+			</staticText>
+		</band>
+		<band height="310">
+			<componentElement>
+				<reportElement uuid="01259984-5497-4f6d-99ff-5304d1938834" key="table 5" style="table" x="0" y="235" width="555" height="50"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="CCC Dataset" uuid="92789b47-9b57-4a29-bc80-c926fb5a6bb0">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="70" uuid="6591b1bf-fd1c-491a-9e85-e05724949663">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="9eda935e-ed4c-4de0-b683-66301de15f66" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[日期]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="yyyy-MM">
+								<reportElement uuid="71810ed7-a73e-4262-a804-8c8c0839e1c8" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{activity_date}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="b9e1c26e-df88-4ec3-bcbd-50c6b1184656">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="1da08249-9189-45bf-9526-1325672ed234" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[應收帳款平均收現天數]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="###0.0;-###0.0">
+								<reportElement uuid="b53fc77c-b1b7-4556-9975-c32bcffb22ff" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{days_sales_outstanding}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="75637cc7-c302-4612-9304-3bea8f6ea5a0">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="f2578b39-652b-4ce8-a3d4-f94830934bc1" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[存貨平均銷貨天數]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="###0.0;-###0.0" isBlankWhenNull="true">
+								<reportElement uuid="ee1c9b46-44eb-47db-815c-714a3d976e5d" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{days_inventory_outstanding}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="1105ac6d-d25c-4cb6-8b78-35135f8e95fd">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="522f884d-0c48-47c3-a2d8-97fbe7ddfb30" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[應付帳款平均付現天數]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="###0.0;-###0.0">
+								<reportElement uuid="882e990b-c05f-47a0-a7a0-a800f3a575dd" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{days_payable_outstanding}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="37b4fc01-1576-498c-b519-ce6e8e84a809">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="3f185e4a-9d3f-4261-9c62-47cab422582b" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[CCC]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="###0.0;-###0.0">
+								<reportElement uuid="f6a4db7a-bc06-4042-8980-95d4e002d759" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{ccc}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<multiAxisChart>
+				<chart>
+					<reportElement uuid="1612385e-c097-44e0-bd06-4b0ee53ed3ac" x="0" y="0" width="449" height="215"/>
+					<chartTitle>
+						<font size="14" isBold="true"/>
+						<titleExpression><![CDATA["CCC"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<multiAxisPlot>
+					<plot/>
+					<axis>
+						<timeSeriesChart>
+							<chart>
+								<reportElement uuid="4c3b294b-8cde-4652-be74-e1f4352d75b5" x="0" y="0" width="0" height="0" backcolor="#FFFFFF"/>
+								<chartTitle color="#000000">
+									<font size="14" isBold="true"/>
+									<titleExpression><![CDATA["CCC"]]></titleExpression>
+								</chartTitle>
+								<chartSubtitle color="#000000"/>
+								<chartLegend textColor="#000000" backgroundColor="#FFFFFF"/>
+							</chart>
+							<timeSeriesDataset timePeriod="Quarter">
+								<dataset>
+									<datasetRun subDataset="CCC Dataset" uuid="f345bd70-ccb9-4149-8a86-801f65e3c36f"/>
+								</dataset>
+								<timeSeries>
+									<seriesExpression><![CDATA["應收帳款平均收現天數"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{days_sales_outstanding}]]></valueExpression>
+								</timeSeries>
+								<timeSeries>
+									<seriesExpression><![CDATA["存貨平均銷貨天數"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{days_inventory_outstanding}]]></valueExpression>
+								</timeSeries>
+								<timeSeries>
+									<seriesExpression><![CDATA["應付帳款平均付現天數"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{days_payable_outstanding}]]></valueExpression>
+								</timeSeries>
+							</timeSeriesDataset>
+							<timeSeriesPlot>
+								<plot/>
+								<valueAxisLabelExpression><![CDATA["因子"]]></valueAxisLabelExpression>
+							</timeSeriesPlot>
+						</timeSeriesChart>
+					</axis>
+					<axis position="rightOrBottom">
+						<timeSeriesChart>
+							<chart>
+								<reportElement uuid="ad5ababf-795e-422f-b95d-d5dd05b54b91" x="0" y="0" width="0" height="0" backcolor="#FFFFFF"/>
+								<chartTitle color="#000000">
+									<font size="14" isBold="true"/>
+									<titleExpression><![CDATA["CCC"]]></titleExpression>
+								</chartTitle>
+								<chartSubtitle color="#000000"/>
+								<chartLegend textColor="#000000" backgroundColor="#FFFFFF"/>
+							</chart>
+							<timeSeriesDataset timePeriod="Quarter">
+								<dataset>
+									<datasetRun subDataset="CCC Dataset" uuid="c0825a45-6814-4838-88c3-cb3c5140c006"/>
+								</dataset>
+								<timeSeries>
+									<seriesExpression><![CDATA["CCC"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{ccc}]]></valueExpression>
+								</timeSeries>
+							</timeSeriesDataset>
+							<timeSeriesPlot>
+								<plot/>
+								<valueAxisLabelExpression><![CDATA["CCC"]]></valueAxisLabelExpression>
+							</timeSeriesPlot>
+						</timeSeriesChart>
+					</axis>
+				</multiAxisPlot>
+			</multiAxisChart>
+		</band>
+		<band height="132">
+			<staticText>
+				<reportElement uuid="9ef3dceb-a243-442e-af1f-51a1a5daaca7" x="0" y="0" width="555" height="36"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[五大盈餘指標]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="52aa7ab6-78c8-4bca-b6c7-3798938f7610" key="table 6" style="table" x="0" y="55" width="555" height="50"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Evaluation Index Dataset" uuid="78615f78-7d5f-46ed-bc7c-229d37d34022">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="70" uuid="4aab3226-1307-4994-a189-340df657b272">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="ca525d5b-cb06-49be-b539-856e84d0ec00" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[日期]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="yyyy-MM">
+								<reportElement uuid="7bac6f74-f271-4e15-a551-fcd73a016327" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{activity_date}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="de6085c3-92b2-439c-bfb5-c4f5bc77d7b1">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="f057c477-1c3a-4e26-bf2a-9a215c47b0c1" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[存貨指標 (-)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00;(###0.00)">
+								<reportElement uuid="22438b06-14ac-49ea-97ac-3a125f49005b" style="negative red inventory_index" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{inventory_index}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="e403b4e9-c754-4c1c-ac13-d7bf7573910a">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="4503d212-e204-4464-a4da-0a6166d9bffe" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[應收帳款指標 (-)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00;(###0.00)">
+								<reportElement uuid="23da52b4-e38b-4fd5-a5b4-89b1de07c107" style="negative red receivable_index" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{receivable_index}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="2edc9a06-625f-4f6f-ba70-f94677dafd66">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="19420973-fdc3-4844-8e93-7325af5c7359" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[銷貨毛利指標 (-)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00;(###0.00)">
+								<reportElement uuid="a1a8b37a-1755-4097-a778-b9851bc919f3" style="negative red gross_profit_index" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{gross_profit_index}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="a8738f36-ba34-4af0-8486-582b8b1eb640">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="b19d0299-322a-4abe-b03f-7fa791a7997f" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[管銷費用指標 (-)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00;(###0.00)">
+								<reportElement uuid="18d6a885-63b4-4770-bb58-7f62c51956e7" style="negative red sga_index" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{sga_index}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="c058fd3b-3120-425a-a909-fdc80fd3b9d4">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="2ea9c692-aea2-4e58-a1b0-9854c581140d" x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[應付帳款指標 (-)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00;(###0.00)">
+								<reportElement uuid="b38551f7-f672-4754-836c-dced4ab8a7d7" style="negative red payable_index" x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{payable_index}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="131">
+			<staticText>
+				<reportElement uuid="9ef3dceb-a243-442e-af1f-51a1a5daaca7" x="0" y="0" width="555" height="36"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[股利政策]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="a846e86d-0c8a-4997-aead-bf07dbe47753" key="table 1" style="table" x="0" y="54" width="555" height="50"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Stock Dividend Dataset" uuid="7078322d-0787-4e91-878b-7ce855ece82f">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="54" uuid="b0837701-b03b-4d82-b382-3dd20b905fc1">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="13237c9e-a5f5-4c63-86af-a6d38ec75062" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[日期]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="yyyy">
+								<reportElement uuid="208eb4bc-6b0e-445b-b55a-e331469ab1b9" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{activity_date}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="73ea4dfc-4862-47cc-8baa-baa521a25dd7">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="bdb902c5-9a16-4dbb-b95a-85ccca802c0c" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[現金股利]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="d077d2b2-331a-4cd5-81c4-d4eabc4b1e9a" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{cash_dividend}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="6ff06513-88ee-429e-8046-6a8da3398569">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="fb850413-bff0-4bfa-9603-8992a1721124" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[盈餘配股	]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="5237b73d-b475-42db-bfea-1311c0814f60" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{stock_dividend_from_retained_earnings}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="f8767107-2da1-42f1-9cf1-ec902ce79f9c">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="13f67bb0-0f34-4bc3-afb3-47536d234a50" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[公積配股	]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="4d8bb0c7-4923-4886-ad2b-7fe280fbea37" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{stock_dividend_from_capital_reserve}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="6f713473-cc12-4dd2-870c-9674980b3c37">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="19788a30-0466-4e0a-a6d3-9339dbd1725f" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[股票股利	]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="da41d97e-d7f1-4073-9e83-5eea241f0407" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{stock_dividend}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="160d3a9b-6b9b-4d52-aa46-92b3cb09bc43">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="076e9dc2-61ad-4b18-9a5b-f105eeab8643" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[合計]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="a7dbd39b-3ed1-47ae-967e-0af70da7ac47" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{total_dividend}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="c4582224-dac2-4160-9461-b1ba315e3a60">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="9ba72adc-2b7d-467d-b092-ae4f8ec2e8d2" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[員工配股率%
+]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="aea8f1bc-b4e9-4c97-ae94-ef09ba9d2cbe" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{profit_sharing_percentage}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="315">
+			<multiAxisChart>
+				<chart>
+					<reportElement uuid="00a67227-c5c7-497d-a2d5-6ed5dd0242ec" x="0" y="0" width="494" height="215"/>
+					<chartTitle>
+						<font fontName="標楷體" size="14" isBold="true"/>
+						<titleExpression><![CDATA["股本形成"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<multiAxisPlot>
+					<plot/>
+					<axis>
+						<timeSeriesChart>
+							<chart>
+								<reportElement uuid="d84296e3-ee07-45e2-90be-fb87e4db3c20" x="0" y="0" width="0" height="0" backcolor="#FFFFFF"/>
+								<chartTitle color="#000000">
+									<font fontName="標楷體" size="14" isBold="true"/>
+									<titleExpression><![CDATA["股本形成"]]></titleExpression>
+								</chartTitle>
+								<chartSubtitle color="#000000"/>
+								<chartLegend textColor="#000000" backgroundColor="#FFFFFF"/>
+							</chart>
+							<timeSeriesDataset timePeriod="Quarter">
+								<dataset>
+									<datasetRun subDataset="Capital Structure Summary Dataset" uuid="dc928888-a5ea-4d22-ab69-ecf365451e90"/>
+								</dataset>
+								<timeSeries>
+									<seriesExpression><![CDATA["現金增資比重"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{spo_ratio}]]></valueExpression>
+								</timeSeries>
+								<timeSeries>
+									<seriesExpression><![CDATA["盈餘轉增資比重"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{capitalization_earnings_ratio}]]></valueExpression>
+								</timeSeries>
+								<timeSeries>
+									<seriesExpression><![CDATA["公積及其他比重"]]></seriesExpression>
+									<timePeriodExpression><![CDATA[$F{activity_date}]]></timePeriodExpression>
+									<valueExpression><![CDATA[$F{capitalization_reserve_and_others_ratio}]]></valueExpression>
+								</timeSeries>
+							</timeSeriesDataset>
+							<timeSeriesPlot>
+								<plot/>
+							</timeSeriesPlot>
+						</timeSeriesChart>
+					</axis>
+				</multiAxisPlot>
+			</multiAxisChart>
+			<componentElement>
+				<reportElement uuid="e034ffc9-935b-47db-a392-3ab443ea5447" key="table 2" style="table" x="0" y="238" width="360" height="50"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Capital Structure Summary Dataset" uuid="d4c46b93-00ba-426f-a82b-9480e19d7126">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="54" uuid="a9e299a4-3979-4d0a-b602-3dea52ee2558">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="fa0f753e-9e61-458d-954e-c49f19226004" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[日期]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="yyyy">
+								<reportElement uuid="880a89aa-7274-470d-8959-eb4fc2837c0a" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{activity_date}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="24867ca8-b527-4e41-889d-8f3fbeee2ead">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="b5e6fe06-491b-4e2b-8ff1-c0fe47f884e1" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[現金增資]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="">
+								<reportElement uuid="5846574c-e310-4b74-ae2f-3a2bd986dca5" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{spo}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="6688a72b-e8f2-4a8a-bbe9-a6bb7b89d27c">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="595f7c70-b09c-4d7e-af09-580865df3f31" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[現金增資比重]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00">
+								<reportElement uuid="8405ccbb-ce2a-4fd0-8312-adec6baa8f44" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{spo_ratio}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="1e7ab611-2636-4e03-9116-c82fe3afbeea">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="af8eb877-d7ad-4a26-a3a5-5cb0cf8829ac" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[盈餘轉增資]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField>
+								<reportElement uuid="0e347ddd-e00f-42c6-a963-c3507dd555d5" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{capitalization_earnings}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="500a7c5d-97ba-4200-8b3c-e8b610143bbc">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="870344d3-49b8-4760-ac4a-eee06d3a4dff" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[盈餘轉增資比重]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00">
+								<reportElement uuid="a9e77bde-43eb-400a-88b0-0802f31f3e2b" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{capitalization_earnings_ratio}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="cbffb96d-566f-4682-b8f8-0fd0e44bff04">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="cf233779-ae3c-4627-b16f-061c0db0c8b0" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[公積及其他]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField>
+								<reportElement uuid="6b1cc170-c7d1-48d0-98c9-fbd589148927" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{capitalization_reserve_and_others}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="bccd1fdb-a0b3-4252-86b9-334e0367a869">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="99e9e85d-b6e7-40e1-aa6a-551c6e521649" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[公積及其他比重]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00">
+								<reportElement uuid="e0f12c9f-7667-44bf-88af-9e4f13ea3eff" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{capitalization_reserve_and_others_ratio}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

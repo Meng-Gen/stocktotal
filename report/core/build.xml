@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    
+<project name="StocktotalReport" basedir="." default="jar">
+
+	<property name="src.dir" value="src" />
+	<property name="lib.dir" value="lib" />
+	<property name="lib.jars" value="commons-beanutils-1.8.0.jar commons-cli-1.2.jar commons-collections-2.1.1.jar commons-configuration-1.9.jar commons-digester-2.1.jar commons-lang-2.6.jar commons-logging-1.1.1.jar groovy-all-2.0.1.jar jasperreports-4.8.0.jar jcommon-1.0.15.jar jfreechart-1.0.12.jar log4j-1.2.17.jar postgresql-9.2-1002.jdbc3.jar iText-2.1.7.js1.jar font-kaiu.jar" />
+    <property name="config.dir" value="config"/>
+	<property name="build.dir" value="../build" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="dest.dir" value="${build.dir}/release" />
+	<property name="dest.jar" value="${dest.dir}/stocktotal-report.jar" />
+
+	<path id="classpath">
+		<fileset dir="${lib.dir}" >
+			<include name="**/*.jar" /> 
+		</fileset>
+	</path>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="compile" depends="clean">
+		<mkdir dir="${classes.dir}" />
+
+		<javac srcdir="${src.dir}" encoding="UTF-8" destdir="${classes.dir}" includeantruntime="false" debug="true">
+			<classpath refid="classpath" />
+			<include name="**/*.java" />
+		</javac>
+        
+        <!-- Copy all config files to ${classes.dir} -->
+		<copy todir="${classes.dir}">
+			<fileset dir="${src.dir}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="jar" depends="compile">
+		<jar destfile="${dest.jar}">
+			<fileset dir="${classes.dir}" />
+			<manifest>
+				<attribute name="Main-Class" value="stocktotal.report.Program"/>
+				<attribute name="Class-Path" value="${lib.jars}"/>
+			</manifest>
+		</jar>
+		<copy todir="${dest.dir}">
+			<fileset dir="${lib.dir}" />
+		</copy>
+   		<copy todir="${dest.dir}">
+			<fileset dir="${config.dir}" />
+		</copy>        
+	</target>
+
+	<target name="run">
+		<java jar="${dest.jar}" fork="true" failonerror="true" />
+	</target>
+
+</project>

@@ -1,0 +1,1 @@
+import osdef extract(src_file, output_dir):    unzip_cmdline = '''unzip {src_file} -d {output_dir}'''.format(src_file=src_file, output_dir=output_dir)    os.system(unzip_cmdline)
