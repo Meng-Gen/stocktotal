@@ -6,32 +6,32 @@ stocktotal
 Introduction
 ------------
 
-stocktotal project contains two modules: source module and report module.
-Source module is used to source Taiwan stock information.
-Report module is used to generate analysis report.
+stocktotal project contains two modules: source and report:
+* Source: source Taiwan stock information.
+* Report: generate analysis report.
 
 Environment
 -----------
 
 The development platform is Windows.  The author had ported to Mac but didn't test yet.
  
-1.   Database: PostgreSQL 9.2 (or higher).
-2.   [Python 3.2](http://www.python.org/) (or higher) environment.  Do not use Python 2.x.
-3.   Java running environment.
-4.   [Apache Ant](http://ant.apache.org/) building environment.
+1.   Database: PostgreSQL 9.2 (or higher)
+2.   [Python 3.2](http://www.python.org/) (or higher) environment
+3.   Java running environment
+4.   [Apache Ant](http://ant.apache.org/) building environment
 
 Prerequirement
 --------------
 
 * Source module
-    1.   [lxml](http://lxml.de/): Processing HTML in the Python language.
+    1.   [lxml](http://lxml.de/): processing HTML in the Python language
     2.   [py-postgresql](http://pypi.python.org/pypi/py-postgresql): PostgreSQL driver and tools library
     3.   [7-Zip](http://www.7-zip.org/): file archiver in Windows
     4.   xlrd: extract data from Microsoft Excel.  To use xlrd in Python 3, may use [takluyver-xlrd](https://github.com/takluyver/xlrd/zipball/py3)
-    5.   [wget](http://users.ugent.be/~bpuype/wget/): wget in Windows
+    5.   [wget](http://users.ugent.be/~bpuype/wget/): in Windows
 * Report module, need to prepare the following required jar files:
     1.   [JasperReports library](http://community.jaspersoft.com/project/jasperreports-library): please check `$HOME_DIR/report/core/build.xml` for details
-    2.   KAIU Font: Use iReport 4.x to build into a jar file, say `font-kaiu.jar`
+    2.   KAIU font: use iReport 4.x to import Windows KAIU font into a jar file, say `font-kaiu.jar`
     3.   [PostgreSQL driver](http://jdbc.postgresql.org/download.html): JDBC 3 
     4.   [Apache commons configuration](http://commons.apache.org/configuration/)
     5.   [Apache log4j](http://logging.apache.org/log4j/)
