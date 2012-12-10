@@ -50,11 +50,11 @@ public class ReportGenerator {
         makeReportDirectory(stockCode);
         
         for (String type : reportTypes) {
-            if (type.toUpperCase().equalsIgnoreCase("html")) {
+            if (type.equalsIgnoreCase("html")) {
                 logger.info("Export to HTML format report");
                 JasperExportManager.exportReportToHtmlFile(jasperPrint, getReportFilePath(stockCode, "html"));
             } 
-            else if (type.toUpperCase().equalsIgnoreCase("pdf")) {
+            else if (type.equalsIgnoreCase("pdf")) {
                 logger.info("Export to PDF format report");
                 JasperExportManager.exportReportToPdfFile(jasperPrint, getReportFilePath(stockCode, "pdf"));
             }
