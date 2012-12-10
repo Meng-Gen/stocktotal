@@ -6,9 +6,9 @@ stocktotal
 Introduction
 ------------
 
-stocktotal project contains two modules: source and report:
-* Source: source Taiwan stock information.
-* Report: generate analysis report.
+* stocktotal project contains two modules:
+    * Source module: source Taiwan stock information into database
+    * Report module: generate analysis report from database
 
 Environment
 -----------
