@@ -463,6 +463,161 @@ $_$;
 ALTER FUNCTION public.evaluation_index(stock_code text) OWNER TO stocktotal;
 
 --
+-- Name: expected_price_range(text); Type: FUNCTION; Schema: public; Owner: stocktotal
+--
+
+CREATE FUNCTION expected_price_range(stock_code text) RETURNS TABLE(highest_expected_price double precision, lowest_expected_price double precision)
+    LANGUAGE sql
+    AS $_$
+with ExpectedRoeRange as
+(
+    select * from expected_roe_range($1)
+)
+select 
+    X.roe / Y.avg_highest_expected_roe * X.book_value as highest_expected_price,
+    X.roe / Y.avg_lowest_expected_roe * X.book_value as lowest_expected_price
+from 
+(
+    select roe, yearly_highest_price, yearly_lowest_price, book_value from ExpectedRoeRange where activity_year in 
+    (
+        select max(activity_year) from ExpectedRoeRange
+    ) 
+) as X,
+(
+    select 
+        avg(highest_expected_roe) as avg_highest_expected_roe, 
+        avg(lowest_expected_roe) as avg_lowest_expected_roe
+    from ExpectedRoeRange
+) as Y
+$_$;
+
+
+ALTER FUNCTION public.expected_price_range(stock_code text) OWNER TO stocktotal;
+
+--
+-- Name: expected_roe_range(text); Type: FUNCTION; Schema: public; Owner: stocktotal
+--
+
+CREATE FUNCTION expected_roe_range(stock_code text) RETURNS TABLE(activity_year double precision, roe double precision, yearly_highest_price double precision, yearly_lowest_price double precision, book_value double precision, highest_expected_roe double precision, lowest_expected_roe double precision)
+    LANGUAGE sql
+    AS $_$
+select 
+    X.activity_year, 
+    X.roe, 
+    X.yearly_highest_price, 
+    X.yearly_lowest_price, 
+    Y.book_value,
+    X.roe / X.yearly_highest_price * Y.book_value as highest_expected_roe,
+    X.roe / X.yearly_lowest_price * Y.book_value as lowest_expected_roe
+from
+(
+    with YearlyRoe as 
+    (
+        with Roe as 
+        (
+            select activity_date, roe from roe($1)
+        )
+        select activity_date, roe from Roe where activity_date in 
+        (
+            select A.activity_date from 
+            (
+                select 
+                    date_part('year', activity_date) as activity_year, 
+                    max(activity_date) as activity_date
+                from Roe group by activity_year
+            ) as A
+        )
+    )
+    select 
+        A.activity_year,
+        A.yearly_highest_price, 
+        A.yearly_lowest_price,
+        B.roe
+    from 
+    (
+        select 
+            date_part('year', activity_date) as activity_year,
+            max(highest_price) as yearly_highest_price, 
+            min(lowest_price) as yearly_lowest_price 
+        from ListedCoTradingInfo where stock_code = $1
+        group by activity_year
+    ) as A,
+    YearlyRoe as B
+    where A.activity_year = date_part('year', B.activity_date)
+
+) as X,
+(
+    with BookValue as 
+    (
+        with T as
+        (
+            select
+                A.activity_date,
+                A.report_date,
+                A.number as equity,
+                B.number as common_stock_capital,
+                C.preferred_stock_capital as preferred_stock_capital
+            from
+                BalanceSheet as A,
+                BalanceSheet as B,
+                (
+                    select
+                        activity_date,
+                        report_date,
+                        sum(number) as preferred_stock_capital
+                    from BalanceSheet
+                    where
+                        report_type = 'C'
+                        and stock_code = $1
+                        and item in ('少數股權')
+                    group by activity_date, report_date
+                ) as C
+            where
+                A.stock_code = B.stock_code
+                and A.activity_date = B.activity_date
+                and B.activity_date = C.activity_date
+                and A.report_date = B.report_date
+                and B.report_date = C.report_date
+                and A.item = '股東權益總計'
+                and B.item = '普通股股本'
+                and A.report_type = 'C'
+                and B.report_type = 'C'
+                and A.stock_code = $1
+                and A.number != 0
+                and B.number != 0
+        )
+        select
+            T.activity_date,
+            (T.equity - T.preferred_stock_capital)/T.common_stock_capital * 10 as book_value
+        from
+            T,
+            (
+                select activity_date, max(report_date) as report_date from T
+                group by activity_date
+            ) as U
+        where
+            T.activity_date = U.activity_date
+            and T.report_date = U.report_date
+    )
+    select date_part('year', activity_date) as activity_year, book_value from BookValue where activity_date in 
+    (
+        select A.activity_date from 
+        (
+            select 
+                date_part('year', activity_date) as activity_year, 
+                max(activity_date) as activity_date
+            from BookValue group by activity_year
+        ) as A
+    )
+) as Y
+where X.activity_year = Y.activity_year
+order by X.activity_year desc
+$_$;
+
+
+ALTER FUNCTION public.expected_roe_range(stock_code text) OWNER TO stocktotal;
+
+--
 -- Name: financial_structure(text); Type: FUNCTION; Schema: public; Owner: stocktotal
 --
 
