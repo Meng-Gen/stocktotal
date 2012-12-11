@@ -9,23 +9,6 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 --
--- Name: stocktotal; Type: DATABASE; Schema: -; Owner: stocktotal
---
-
-CREATE DATABASE stocktotal WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Chinese (Traditional)_Taiwan.950' LC_CTYPE = 'Chinese (Traditional)_Taiwan.950';
-
-
-ALTER DATABASE stocktotal OWNER TO stocktotal;
-
-\connect stocktotal
-
-SET statement_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-
---
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
@@ -1025,6 +1008,26 @@ CREATE TABLE listedcostatistics (
 ALTER TABLE public.listedcostatistics OWNER TO stocktotal;
 
 --
+-- Name: listedcotradinginfo; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE listedcotradinginfo (
+    creation_dt timestamp without time zone DEFAULT now(),
+    stock_code text NOT NULL,
+    activity_date date NOT NULL,
+    highest_price double precision,
+    lowest_price double precision,
+    weighted_average_price double precision,
+    trans double precision,
+    trade_value double precision,
+    trade_volume double precision,
+    turnover_ratio double precision
+);
+
+
+ALTER TABLE public.listedcotradinginfo OWNER TO postgres;
+
+--
 -- Name: marketstatistics; Type: TABLE; Schema: public; Owner: stocktotal; Tablespace: 
 --
 
@@ -1169,6 +1172,14 @@ ALTER TABLE ONLY listedcostatistics
 
 
 --
+-- Name: listedcotradinginfo_stock_code_activity_date_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY listedcotradinginfo
+    ADD CONSTRAINT listedcotradinginfo_stock_code_activity_date_key UNIQUE (stock_code, activity_date);
+
+
+--
 -- Name: marketstatistics_report_date_activity_date_report_type_key; Type: CONSTRAINT; Schema: public; Owner: stocktotal; Tablespace: 
 --
 
@@ -1295,6 +1306,17 @@ GRANT ALL ON TABLE incomestmt TO PUBLIC;
 REVOKE ALL ON TABLE listedcostatistics FROM PUBLIC;
 REVOKE ALL ON TABLE listedcostatistics FROM stocktotal;
 GRANT ALL ON TABLE listedcostatistics TO PUBLIC;
+
+
+--
+-- Name: listedcotradinginfo; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON TABLE listedcotradinginfo FROM PUBLIC;
+REVOKE ALL ON TABLE listedcotradinginfo FROM postgres;
+GRANT ALL ON TABLE listedcotradinginfo TO postgres;
+GRANT ALL ON TABLE listedcotradinginfo TO stocktotal;
+GRANT ALL ON TABLE listedcotradinginfo TO PUBLIC;
 
 
 --

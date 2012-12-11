@@ -8,23 +8,23 @@ from lxml import html
 
 from . import twse_source
 
-class MonthlyTradingInfoSource(twse_source.TwseSource):
+class ListedCoTradingInfoSource(twse_source.TwseSource):
 
     def __init__(self):
         twse_source.TwseSource.__init__(self)
         self.URL_TEMPLATE = '''http://www.twse.com.tw/ch/trading/exchange/FMSRFK/genpage/Report%s12/%s_F3_1_10_%s.php?STK_NO=%s&myear=%s'''
-        self.HTML_DIR = '../dataset/monthly_trading_info/html/'
-        self.CSV_DIR = '../dataset/monthly_trading_info/csv/'
+        self.HTML_DIR = '../dataset/listed_co_trading_info/html/'
+        self.CSV_DIR = '../dataset/listed_co_trading_info/csv/'
 
     def source(self, stock_code, begin_date, end_date):
         self.init_dates(begin_date, end_date)
-        #self.source_url_to_html(self.HTML_DIR, stock_code)
-        self.source_csv_to_db('monthly_trading_info', self.CSV_DIR, self.DB_INSERTION, stock_code)
+        self.source_url_to_html(self.HTML_DIR, stock_code)
+        self.source_csv_to_db('listed_co_trading_info', self.CSV_DIR, self.DB_INSERTION, stock_code)
 
     def source_bypass_url(self, stock_code, begin_date, end_date):
         self.init_dates(begin_date, end_date)
-        #self.source_html_to_csv(self.HTML_DIR, self.CSV_DIR, stock_code)
-        self.source_csv_to_db('monthly_trading_info', self.CSV_DIR, self.DB_INSERTION, stock_code)
+        self.source_html_to_csv(self.HTML_DIR, self.CSV_DIR, stock_code)
+        self.source_csv_to_db('listed_co_trading_info', self.CSV_DIR, self.DB_INSERTION, stock_code)
         
     def init_dates(self, begin_date, end_date):
         self.DATES = []
