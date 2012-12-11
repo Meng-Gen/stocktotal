@@ -77,6 +77,7 @@ class TwseSource():
         INSERT_SOURCE_TYPE_MAP = {
             'market_stat': db_insertion.insert_market_stat,
             'listed_co_stat': db_insertion.insert_listed_co_stat,
+            'monthly_trading_info': db_insertion.insert_monthly_trading_info,
         }
         
         db_insertion.open()
