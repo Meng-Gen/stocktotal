@@ -25,6 +25,30 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 SET search_path = public, pg_catalog;
 
 --
+-- Name: accumlated_income_yoy(text); Type: FUNCTION; Schema: public; Owner: stocktotal
+--
+
+CREATE FUNCTION accumlated_income_yoy(stock_code text) RETURNS TABLE(activity_date date, accumlated_income_yoy double precision)
+    LANGUAGE sql
+    AS $_$
+    with AccumlatedIncomeYoy as 
+    (
+        select activity_date, accumlated_income_yoy from operating_income($1)
+    )
+    select 
+        activity_date, 
+        accumlated_income_yoy 
+    from 
+        AccumlatedIncomeYoy
+    where 
+        activity_date - interval '1 year' 
+        >= (select min(activity_date) from AccumlatedIncomeYoy)
+$_$;
+
+
+ALTER FUNCTION public.accumlated_income_yoy(stock_code text) OWNER TO stocktotal;
+
+--
 -- Name: capital_structure_summary(text); Type: FUNCTION; Schema: public; Owner: stocktotal
 --
 
@@ -550,15 +574,35 @@ from
     (
         with T as
         (
-            select
-                A.activity_date,
-                A.report_date,
-                A.number as equity,
-                B.number as common_stock_capital,
-                C.preferred_stock_capital as preferred_stock_capital
-            from
-                BalanceSheet as A,
-                BalanceSheet as B,
+            select 
+                P.activity_date, 
+                P.report_date, 
+                P.equity,
+                P.common_stock_capital,
+                coalesce(Q.preferred_stock_capital, 0) as preferred_stock_capital
+            from 
+                (
+                    select
+                        A.activity_date,
+                        A.report_date,
+                        A.number as equity,
+                        B.number as common_stock_capital
+                    from
+                        BalanceSheet as A,
+                        BalanceSheet as B
+                    where
+                        A.stock_code = B.stock_code
+                        and A.activity_date = B.activity_date
+                        and A.report_date = B.report_date
+                        and A.item = '股東權益總計'
+                        and B.item = '普通股股本'
+                        and A.report_type = 'C'
+                        and B.report_type = 'C'
+                        and A.stock_code = $1
+                        and A.number != 0
+                        and B.number != 0
+                ) as P
+            left join
                 (
                     select
                         activity_date,
@@ -570,20 +614,10 @@ from
                         and stock_code = $1
                         and item in ('少數股權')
                     group by activity_date, report_date
-                ) as C
-            where
-                A.stock_code = B.stock_code
-                and A.activity_date = B.activity_date
-                and B.activity_date = C.activity_date
-                and A.report_date = B.report_date
-                and B.report_date = C.report_date
-                and A.item = '股東權益總計'
-                and B.item = '普通股股本'
-                and A.report_type = 'C'
-                and B.report_type = 'C'
-                and A.stock_code = $1
-                and A.number != 0
-                and B.number != 0
+                ) as Q
+            on 
+                P.activity_date = Q.activity_date 
+                and P.report_date = Q.report_date
         )
         select
             T.activity_date,

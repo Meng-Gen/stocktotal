@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="StocktotalReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e10f98c9-fa56-4c1d-92cb-58a79a3b65db">
 	<property name="ireport.zoom" value="1.3286707500000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="5091"/>
+	<property name="ireport.y" value="2979"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -313,6 +313,16 @@
 		</queryString>
 		<field name="highest_expected_price" class="java.lang.Double"/>
 		<field name="lowest_expected_price" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Accumlated Income YoY Dataset" uuid="40d39902-185e-469c-9d9a-c83b83588f20">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString language="SQL">
+			<![CDATA[select * from accumlated_income_yoy('1101')]]>
+		</queryString>
+		<field name="activity_date" class="java.sql.Date"/>
+		<field name="accumlated_income_yoy" class="java.lang.Double"/>
 	</subDataset>
 	<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
@@ -1532,7 +1542,7 @@
 							</chart>
 							<timeSeriesDataset timePeriod="Month">
 								<dataset>
-									<datasetRun subDataset="Operating Income Dataset" uuid="6af3d666-2d81-4b72-b762-e0c40c62e3d6"/>
+									<datasetRun subDataset="Accumlated Income YoY Dataset" uuid="6af3d666-2d81-4b72-b762-e0c40c62e3d6"/>
 								</dataset>
 								<timeSeries>
 									<seriesExpression><![CDATA["YoY"]]></seriesExpression>
@@ -2887,7 +2897,7 @@
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement uuid="06a261a0-fd35-4045-9f2a-b1fcde475791" key="table" style="table" x="0" y="132" width="360" height="50"/>
+				<reportElement uuid="06a261a0-fd35-4045-9f2a-b1fcde475791" key="table" style="table" positionType="Float" x="0" y="132" width="360" height="50"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Expected Price Range Dataset" uuid="2918d7fa-e428-4125-9be9-687659780b2c">
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
