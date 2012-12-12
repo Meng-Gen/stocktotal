@@ -537,14 +537,13 @@ from
     (
         select 
             date_part('year', activity_date) as activity_year,
-            max(highest_price) as yearly_highest_price, 
-            min(lowest_price) as yearly_lowest_price 
-        from ListedCoTradingInfo where stock_code = $1
+            max(high) as yearly_highest_price, 
+            min(low) as yearly_lowest_price 
+        from HistoricalPrices where stock_code = $1
         group by activity_year
     ) as A,
     YearlyRoe as B
     where A.activity_year = date_part('year', B.activity_date)
-
 ) as X,
 (
     with BookValue as 
