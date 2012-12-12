@@ -1,4 +1,4 @@
-# coding: big5
+# coding: utf8
 
 import csv
 import os
@@ -44,7 +44,7 @@ class ListedCoTradingInfoSource(twse_source.TwseSource):
         dest_stock_dir = self.get_stock_dir(dest_dir, stock_code)
         url = self.get_url(stock_code, single_date)
         dest_file = self.get_filename(dest_stock_dir, single_date, 'html')
-        self.__wget(url, dest_file)
+        self.wget(url, dest_file)
         self.__avoid_blocking()
         
     def source_html_to_csv(self, src_dir, dest_dir, stock_code):
@@ -121,11 +121,6 @@ class ListedCoTradingInfoSource(twse_source.TwseSource):
        
     def get_filename(self, src_dir, date, ext):
         return os.path.join(src_dir, '''%s.%s''' % (date.strftime('%Y'), ext))        
-        
-    def __wget(self, url, dest_file):
-        from ..base import wget
-        cmdline = '''\"{url}\" --waitretry=3 -O \"{dest_file}\"'''.format(url=url, dest_file=dest_file)
-        wget.wget(cmdline)    
         
     def __avoid_blocking(self):
         import time
