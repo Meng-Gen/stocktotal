@@ -131,36 +131,52 @@ class SourceManager():
         s = source.HistoricalPricesSource()
         begin_date = self.__get_daily_source_begin_date(period, None)
         end_date = self.__get_daily_source_end_date(period)
-        for stock_code in self.__get_stock_codes(stock):
+        
+        for stock_code in self.__get_listed_co_stock_codes(stock):
             self.LOGGER.info('''Stock Code: {stock_code}'''.format(stock_code = stock_code))
             if period == 'all':
-                s.source(stock_code)
+                s.source_tw(stock_code)
             else:
-                s.source_delta(stock_code, begin_date, end_date)
+                s.source_delta(stock_code, 'TW', begin_date, end_date)
+        for stock_code in self.__get_otc_stock_codes(stock):
+            self.LOGGER.info('''Stock Code: {stock_code}'''.format(stock_code = stock_code))
+            if period == 'all':
+                s.source_two(stock_code)
+            else:
+                s.source_delta(stock_code, 'TWO', begin_date, end_date)
                 
-    def __get_stock_codes(self, stock):
-        if stock == 'all':
-            import core.db.query.query_factory as query_factory
-            q = query_factory.QueryFactory().stock_code_query()
+    def __get_stock_codes(self, config):
+        import core.db.query.query_factory as query_factory
+        q = query_factory.QueryFactory().stock_code_query()
+        
+        if config == 'all':
             return q.query_listed_co() + q.query_otc()
-        else:
-            return [stock]
-
-    def __get_listed_co_stock_codes(self, stock):
-        if stock == 'all':
-            import core.db.query.query_factory as query_factory
-            q = query_factory.QueryFactory().stock_code_query()
-            return q.query_listed_co()
-        else:
-            return [stock]
-
-    def __get_otc_stock_codes(self, stock):
-        if stock == 'all':
-            import core.db.query.query_factory as query_factory
-            q = query_factory.QueryFactory().stock_code_query()
+        elif config == 'tw':
+            return q.query_listed_co() 
+        elif config == 'two':
             return q.query_otc()
         else:
-            return [stock]            
+            return [config]
+
+    def __get_listed_co_stock_codes(self, stock):
+        import core.db.query.query_factory as query_factory
+        stock_codes = query_factory.QueryFactory().stock_code_query().query_listed_co()
+        if stock == 'all' or stock == 'tw':
+            return stock_codes
+        elif stock in stock_codes:
+            return [stock]
+        else:
+            return []
+
+    def __get_otc_stock_codes(self, stock):
+        import core.db.query.query_factory as query_factory
+        stock_codes = query_factory.QueryFactory().stock_code_query().query_otc()
+        if stock == 'all' or stock == 'two':
+            return stock_codes
+        elif stock in stock_codes:
+            return [stock]
+        else:
+            return []       
             
     def __get_stmt_source_begin_date(self, period):
         if period == 'all':
@@ -216,7 +232,7 @@ def main():
             market_stat, operating_income, trading_summary, listed_co_stat, \
             capital_structure, capital_structure_summary, stock_dividend, \
             listed_co_trading_info, historical_prices')
-    parser.add_argument('-s', '--stock', default='all', help='set stock: all, 1101, ...')
+    parser.add_argument('-s', '--stock', default='all', help='set stock: all, tw, two, 1101, ...')
     parser.add_argument('-p', '--period', default='recent', help='set period: all, recent, long')
     parser.add_argument('-c', '--content', default='url', help='set source content: all, no_url, url')
     args = parser.parse_args()
