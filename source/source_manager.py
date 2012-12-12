@@ -116,11 +116,8 @@ class SourceManager():
         s = source.ListedCoTradingInfoSource()
         begin_date = self.__get_yearly_source_begin_date(period, '1992-01-01')
         end_date = self.__get_yearly_source_end_date(period)
-        for stock_code in  self.__get_listed_co_stock_codes(stock):
+        for stock_code in self.__get_listed_co_stock_codes(stock):
             self.LOGGER.info('''Stock Code: {stock_code}'''.format(stock_code = stock_code))
-            if stock_code < '1337':
-                self.LOGGER.info('''Stock Code: {stock_code} is done.  Skipped'''.format(stock_code = stock_code))
-                continue
             if content == 'all':
                 s.source(stock_code, begin_date, end_date)
             elif content == 'no_url':
@@ -128,13 +125,24 @@ class SourceManager():
             elif content == 'url':
                 s.init_dates(begin_date, end_date)
                 s.source_url_to_html(s.HTML_DIR, stock_code)
-            
+
+    def source_historical_prices(self, stock, period):
+        import core.source.historical_prices_source as source
+        s = source.HistoricalPricesSource()
+        begin_date = self.__get_daily_source_begin_date(period, None)
+        end_date = self.__get_daily_source_end_date(period)
+        for stock_code in self.__get_stock_codes(stock):
+            self.LOGGER.info('''Stock Code: {stock_code}'''.format(stock_code = stock_code))
+            if period == 'all':
+                s.source(stock_code)
+            else:
+                s.source_delta(stock_code, begin_date, end_date)
+                
     def __get_stock_codes(self, stock):
         if stock == 'all':
             import core.db.query.query_factory as query_factory
             q = query_factory.QueryFactory().stock_code_query()
-            return q.query_otc()
-            #return q.query_listed_co()
+            return q.query_listed_co() + q.query_otc()
         else:
             return [stock]
 
@@ -206,7 +214,8 @@ def main():
     parser.add_argument('-t', '--target', default='stock_code', help='set target: stock_code, \
             cash_flow_stmt, income_stmt, balance_sheet, \
             market_stat, operating_income, trading_summary, listed_co_stat, \
-            capital_structure, capital_structure_summary, stock_dividend, listed_co_trading_info')
+            capital_structure, capital_structure_summary, stock_dividend, \
+            listed_co_trading_info, historical_prices')
     parser.add_argument('-s', '--stock', default='all', help='set stock: all, 1101, ...')
     parser.add_argument('-p', '--period', default='recent', help='set period: all, recent, long')
     parser.add_argument('-c', '--content', default='url', help='set source content: all, no_url, url')
@@ -226,6 +235,7 @@ def main():
         'capital_structure_summary': m.source_capital_structure_summary,
         'stock_dividend': m.source_stock_dividend,
         'listed_co_trading_info': m.source_listed_co_trading_info,
+        'historical_prices': m.source_historical_prices,
     }
     assert args.target in source_map
     assert args.period in ['all', 'recent', 'long']
@@ -233,6 +243,8 @@ def main():
 
     if args.target in ['cash_flow_stmt', 'income_stmt', 'balance_sheet', 'listed_co_trading_info']:
         source_map[args.target](args.stock, args.period, args.content)
+    elif args.target in ['historical_prices']:
+        source_map[args.target](args.stock, args.period)
     elif args.target in ['capital_structure', 'capital_structure_summary', 'stock_dividend']:
         source_map[args.target](args.stock)
     elif args.target in ['stock_code']:

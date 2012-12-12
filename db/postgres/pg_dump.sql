@@ -1129,6 +1129,25 @@ CREATE TABLE cashflowstmt (
 ALTER TABLE public.cashflowstmt OWNER TO stocktotal;
 
 --
+-- Name: historicalprices; Type: TABLE; Schema: public; Owner: stocktotal; Tablespace: 
+--
+
+CREATE TABLE historicalprices (
+    creation_dt timestamp without time zone DEFAULT now(),
+    stock_code text NOT NULL,
+    activity_date date NOT NULL,
+    open double precision,
+    high double precision,
+    low double precision,
+    close double precision,
+    volume double precision,
+    adj_close double precision
+);
+
+
+ALTER TABLE public.historicalprices OWNER TO stocktotal;
+
+--
 -- Name: incomestmt; Type: TABLE; Schema: public; Owner: stocktotal; Tablespace: 
 --
 
@@ -1163,7 +1182,7 @@ CREATE TABLE listedcostatistics (
 ALTER TABLE public.listedcostatistics OWNER TO stocktotal;
 
 --
--- Name: listedcotradinginfo; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+-- Name: listedcotradinginfo; Type: TABLE; Schema: public; Owner: stocktotal; Tablespace: 
 --
 
 CREATE TABLE listedcotradinginfo (
@@ -1180,7 +1199,7 @@ CREATE TABLE listedcotradinginfo (
 );
 
 
-ALTER TABLE public.listedcotradinginfo OWNER TO postgres;
+ALTER TABLE public.listedcotradinginfo OWNER TO stocktotal;
 
 --
 -- Name: marketstatistics; Type: TABLE; Schema: public; Owner: stocktotal; Tablespace: 
@@ -1311,6 +1330,14 @@ ALTER TABLE ONLY cashflowstmt
 
 
 --
+-- Name: historicalprices_stock_code_activity_date_key; Type: CONSTRAINT; Schema: public; Owner: stocktotal; Tablespace: 
+--
+
+ALTER TABLE ONLY historicalprices
+    ADD CONSTRAINT historicalprices_stock_code_activity_date_key UNIQUE (stock_code, activity_date);
+
+
+--
 -- Name: incomestmt_stock_code_report_type_report_date_activity_date_key; Type: CONSTRAINT; Schema: public; Owner: stocktotal; Tablespace: 
 --
 
@@ -1327,7 +1354,7 @@ ALTER TABLE ONLY listedcostatistics
 
 
 --
--- Name: listedcotradinginfo_stock_code_activity_date_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+-- Name: listedcotradinginfo_stock_code_activity_date_key; Type: CONSTRAINT; Schema: public; Owner: stocktotal; Tablespace: 
 --
 
 ALTER TABLE ONLY listedcotradinginfo
@@ -1445,6 +1472,16 @@ GRANT ALL ON TABLE cashflowstmt TO PUBLIC;
 
 
 --
+-- Name: historicalprices; Type: ACL; Schema: public; Owner: stocktotal
+--
+
+REVOKE ALL ON TABLE historicalprices FROM PUBLIC;
+REVOKE ALL ON TABLE historicalprices FROM stocktotal;
+GRANT ALL ON TABLE historicalprices TO stocktotal;
+GRANT ALL ON TABLE historicalprices TO PUBLIC;
+
+
+--
 -- Name: incomestmt; Type: ACL; Schema: public; Owner: stocktotal
 --
 
@@ -1464,12 +1501,11 @@ GRANT ALL ON TABLE listedcostatistics TO PUBLIC;
 
 
 --
--- Name: listedcotradinginfo; Type: ACL; Schema: public; Owner: postgres
+-- Name: listedcotradinginfo; Type: ACL; Schema: public; Owner: stocktotal
 --
 
 REVOKE ALL ON TABLE listedcotradinginfo FROM PUBLIC;
-REVOKE ALL ON TABLE listedcotradinginfo FROM postgres;
-GRANT ALL ON TABLE listedcotradinginfo TO postgres;
+REVOKE ALL ON TABLE listedcotradinginfo FROM stocktotal;
 GRANT ALL ON TABLE listedcotradinginfo TO stocktotal;
 GRANT ALL ON TABLE listedcotradinginfo TO PUBLIC;
 
