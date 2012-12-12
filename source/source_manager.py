@@ -133,8 +133,8 @@ class SourceManager():
         if stock == 'all':
             import core.db.query.query_factory as query_factory
             q = query_factory.QueryFactory().stock_code_query()
-            #return q.query_otc()
-            return q.query_listed_co()
+            return q.query_otc()
+            #return q.query_listed_co()
         else:
             return [stock]
 
