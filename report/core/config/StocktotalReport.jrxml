@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="StocktotalReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e10f98c9-fa56-4c1d-92cb-58a79a3b65db">
 	<property name="ireport.zoom" value="1.3286707500000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="672"/>
+	<property name="ireport.y" value="5091"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -288,6 +288,31 @@
 		<field name="capitalization_earnings_ratio" class="java.lang.Double"/>
 		<field name="capitalization_reserve_and_others" class="java.lang.Double"/>
 		<field name="capitalization_reserve_and_others_ratio" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Expected Roe Range Dataset" uuid="168b9486-a067-4daa-babc-92cd4a607ee5">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from expected_roe_range($P{STOCK_CODE})]]>
+		</queryString>
+		<field name="activity_year" class="java.lang.Double"/>
+		<field name="roe" class="java.lang.Double"/>
+		<field name="yearly_highest_price" class="java.lang.Double"/>
+		<field name="yearly_lowest_price" class="java.lang.Double"/>
+		<field name="book_value" class="java.lang.Double"/>
+		<field name="highest_expected_roe" class="java.lang.Double"/>
+		<field name="lowest_expected_roe" class="java.lang.Double"/>
+	</subDataset>
+	<subDataset name="Expected Price Range Dataset" uuid="0def4bc5-907d-4c30-9abb-ee83fc201a7f">
+		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select * from expected_price_range($P{STOCK_CODE})]]>
+		</queryString>
+		<field name="highest_expected_price" class="java.lang.Double"/>
+		<field name="lowest_expected_price" class="java.lang.Double"/>
 	</subDataset>
 	<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["1301"]]></defaultValueExpression>
@@ -958,7 +983,7 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20">
-							<textField pattern="###0.00">
+							<textField pattern="###0.00 %">
 								<reportElement uuid="248c31b3-6186-46b7-b1a2-31d0618e9fbd" x="0" y="0" width="54" height="20"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<paragraph rightIndent="1"/>
@@ -978,7 +1003,7 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20">
-							<textField pattern="###0.00">
+							<textField pattern="###0.00 %">
 								<reportElement uuid="524bbc12-d283-4c46-83ca-f8fdb96c0c90" x="0" y="0" width="54" height="20"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<paragraph rightIndent="1"/>
@@ -998,7 +1023,7 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20">
-							<textField pattern="###0.00">
+							<textField pattern="###0.00 %">
 								<reportElement uuid="878dc9ba-d8e6-4a2b-bba0-63cfd5a8e8bb" x="0" y="0" width="54" height="20"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<paragraph rightIndent="1"/>
@@ -2615,7 +2640,7 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20">
-							<textField pattern="###0.00">
+							<textField pattern="###0.00 %">
 								<reportElement uuid="8405ccbb-ce2a-4fd0-8312-adec6baa8f44" x="0" y="0" width="54" height="20"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<paragraph rightIndent="1"/>
@@ -2655,7 +2680,7 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20">
-							<textField pattern="###0.00">
+							<textField pattern="###0.00 %">
 								<reportElement uuid="a9e77bde-43eb-400a-88b0-0802f31f3e2b" x="0" y="0" width="54" height="20"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<paragraph rightIndent="1"/>
@@ -2695,12 +2720,215 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20">
-							<textField pattern="###0.00">
+							<textField pattern="###0.00 %">
 								<reportElement uuid="e0f12c9f-7667-44bf-88af-9e4f13ea3eff" x="0" y="0" width="54" height="20"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{capitalization_reserve_and_others_ratio}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="182">
+			<staticText>
+				<reportElement uuid="9ef3dceb-a243-442e-af1f-51a1a5daaca7" x="0" y="0" width="555" height="36"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[股票投資策略]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="dc6f41b9-0470-4003-87fe-b09cbace58b6" key="table" style="table" x="0" y="53" width="360" height="50"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Expected Roe Range Dataset" uuid="c599e873-76f9-485b-a0a9-0a2c69dbbed2">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="54" uuid="8ae2f730-438f-44d5-b598-dbbeab880e11">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="2451103c-8ebb-4212-b91a-2781d7ef8727" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[日期]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="###0">
+								<reportElement uuid="85e1593b-28df-4668-ab13-6af089216c5a" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{activity_year}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="e1e63510-eaad-44b6-abe0-b4dc3eabb7cc">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="47fe7920-718c-478e-a79e-7b7c37f51340" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[ROE]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="###0.00 %">
+								<reportElement uuid="02124fe3-b095-4190-a435-7285e873ca4e" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{roe}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="af542c27-1c4d-4dbf-8e56-192a764be8f8">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="ed877922-eb81-49b6-b306-9741e5e9f345" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[每股淨值]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="###0.00">
+								<reportElement uuid="65e5ca9e-addf-4c5e-9893-5969888e93ed" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{book_value}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="adcd80eb-c6db-4b89-8dd0-d45a23b27fc3">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="29123ae9-c6cf-40cc-af4a-3057ad037bcf" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[最高價]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="###0.00">
+								<reportElement uuid="06f82eed-b343-4ca7-9b6a-4db16b720026" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{yearly_highest_price}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="5c71b44b-0923-44bc-9ddc-3d8657ebc908">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="ee56fd37-7c6d-41e7-9b6d-0230ef85afd5" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[最高價預期報酬率]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="###0.00 %">
+								<reportElement uuid="66c5dfb7-e8a9-4ceb-9818-8a63ab85f160" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{highest_expected_roe}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="fbff0233-1d2d-4fe6-910f-62fda92a1981">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="a4c5b262-dd53-4636-abc5-08348fd0d093" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[最低價]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="###0.00">
+								<reportElement uuid="f4494f00-a6ab-44aa-86f2-b27e6579e2b2" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{yearly_lowest_price}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="54" uuid="e2189985-d9c4-4438-87a6-4d917a5073b4">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="0a5ec2c2-2427-4ee6-9660-9386748035bd" x="0" y="0" width="54" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[最低價預期報酬率]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="###0.00 %">
+								<reportElement uuid="1fe1368e-cad5-4f91-8ab2-6adecc91d956" x="0" y="0" width="54" height="20"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{lowest_expected_roe}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<componentElement>
+				<reportElement uuid="06a261a0-fd35-4045-9f2a-b1fcde475791" key="table" style="table" x="0" y="132" width="360" height="50"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Expected Price Range Dataset" uuid="2918d7fa-e428-4125-9be9-687659780b2c">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="120" uuid="61aee516-8ded-406f-b19e-062d9904230c">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="bd439b1b-f7ca-4518-bffa-f5bf95bf8c54" x="0" y="0" width="120" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[預期最高價（賣點）]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00">
+								<reportElement uuid="b0a3c46f-f019-4373-bf74-1e41597940ec" x="0" y="0" width="120" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{highest_expected_price}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="120" uuid="536371d0-fe3d-4062-b3c1-857e713117b8">
+						<jr:columnHeader style="table_CH" height="30">
+							<staticText>
+								<reportElement uuid="d4bc0dbf-69dd-4cc9-b806-5a8d3f603ab1" x="0" y="0" width="120" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="標楷體" isBold="true"/>
+								</textElement>
+								<text><![CDATA[預期最低價（買點）]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20">
+							<textField pattern="###0.00">
+								<reportElement uuid="9f121cfe-e6f6-4b1f-bb54-f8528c936375" x="0" y="0" width="120" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<paragraph rightIndent="1"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{lowest_expected_price}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
