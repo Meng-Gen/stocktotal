@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import csv
 import logging
 import os
@@ -33,7 +35,7 @@ class TwseSource():
         for date in self.DATES:
             url = self.get_url(date)
             dest_file = self.get_filename(dest_dir, date, 'zip')
-            self.__wget(url, dest_file)
+            self.wget(url, dest_file)
 
     def source_zip_to_xls(self, src_dir, dest_dir):
         assert os.path.isdir(src_dir)
@@ -77,6 +79,7 @@ class TwseSource():
         INSERT_SOURCE_TYPE_MAP = {
             'market_stat': db_insertion.insert_market_stat,
             'listed_co_stat': db_insertion.insert_listed_co_stat,
+            'listed_co_trading_info': db_insertion.insert_listed_co_trading_info,
         }
         
         db_insertion.open()
@@ -93,7 +96,7 @@ class TwseSource():
     def get_filename(self, src_dir, date, ext):
         pass            
         
-    def __wget(self, url, dest_file):
+    def wget(self, url, dest_file):
         from ..base import wget
         cmdline = '''\"{url}\" --waitretry=3 -O \"{dest_file}\"'''.format(url=url, dest_file=dest_file)
         wget.wget(cmdline)

@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import csv
 import os
 
@@ -40,12 +42,12 @@ class StockCodeSource():
 
         assert os.path.isfile(src_file)
 
-        src_file_h = open(src_file)
+        src_file_h = open(src_file, 'rb')
         content = src_file_h.read()
         src_file_h.close()
 
         csv_writer = csv.writer(open(dest_file, 'w', newline=''))
-        table = html.fromstring(content)
+        table = html.fromstring(content.decode('big5-hkscs'))
         for row in table.xpath('//body/table[@class="h4"]/tr'):
             columns = [_.strip() for _ in row.xpath('./td/text()')]
             if len(columns) is 5:

@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import csv
 import os
 import datetime
@@ -5,14 +7,10 @@ import datetime
 from . import mops_source
 from ..base import date_util
 
-class OperatingIncomeSource(mops_source.MopsSource):
+class OperatingIncomeBaseSource(mops_source.MopsSource):
 
     def __init__(self):
         mops_source.MopsSource.__init__(self)
-        
-        self.URL_TEMPLATE = '''http://mops.twse.com.tw/t21/sii/t21sc03_%s_%s.html'''
-        self.HTML_DIR = '../dataset/operating_income/html/'
-        self.CSV_DIR = '../dataset/operating_income/csv/'
 
     def source(self, begin_date, end_date):
         self.init_dates(begin_date, end_date)
@@ -89,3 +87,34 @@ class OperatingIncomeSource(mops_source.MopsSource):
         
     def get_filename(self, src_dir, date, ext):
         return os.path.join(src_dir, date.strftime('%Y-%m') + '.' + ext) 
+
+        
+
+class OperatingIncomeTwSource(OperatingIncomeBaseSource):
+
+    def __init__(self):
+        OperatingIncomeBaseSource.__init__(self)
+        self.URL_TEMPLATE = '''http://mops.twse.com.tw/t21/sii/t21sc03_%s_%s.html'''
+        self.HTML_DIR = '../dataset/operating_income/tw/html/'
+        self.CSV_DIR = '../dataset/operating_income/tw/csv/'
+
+
+        
+class OperatingIncomeTwoSource(OperatingIncomeBaseSource):
+
+    def __init__(self):
+        OperatingIncomeBaseSource.__init__(self)
+        self.URL_TEMPLATE = '''http://mopsov.twse.com.tw/t21/otc/t21sc03_%s_%s.html'''
+        self.HTML_DIR = '../dataset/operating_income/two/html/'
+        self.CSV_DIR = '../dataset/operating_income/two/csv/'
+
+
+        
+class OperatingIncomeSource():
+
+    def __init__(self):
+        pass
+
+    def source(self, begin_date, end_date):
+        OperatingIncomeTwSource().source(begin_date, end_date)
+        OperatingIncomeTwoSource().source(begin_date, end_date)

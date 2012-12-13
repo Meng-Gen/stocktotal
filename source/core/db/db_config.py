@@ -1,1 +1,1 @@
-#DB_TYPE = 'sqlite'DB_TYPE = 'postgres'
+# coding: utf-8DB_TYPE = 'postgres'

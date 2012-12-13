@@ -9,23 +9,6 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 --
--- Name: stocktotal; Type: DATABASE; Schema: -; Owner: stocktotal
---
-
-CREATE DATABASE stocktotal WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Chinese (Traditional)_Taiwan.950' LC_CTYPE = 'Chinese (Traditional)_Taiwan.950';
-
-
-ALTER DATABASE stocktotal OWNER TO stocktotal;
-
-\connect stocktotal
-
-SET statement_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-
---
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
@@ -40,6 +23,30 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 SET search_path = public, pg_catalog;
+
+--
+-- Name: accumlated_income_yoy(text); Type: FUNCTION; Schema: public; Owner: stocktotal
+--
+
+CREATE FUNCTION accumlated_income_yoy(stock_code text) RETURNS TABLE(activity_date date, accumlated_income_yoy double precision)
+    LANGUAGE sql
+    AS $_$
+    with AccumlatedIncomeYoy as 
+    (
+        select activity_date, accumlated_income_yoy from operating_income($1)
+    )
+    select 
+        activity_date, 
+        accumlated_income_yoy 
+    from 
+        AccumlatedIncomeYoy
+    where 
+        activity_date - interval '1 year' 
+        >= (select min(activity_date) from AccumlatedIncomeYoy)
+$_$;
+
+
+ALTER FUNCTION public.accumlated_income_yoy(stock_code text) OWNER TO stocktotal;
 
 --
 -- Name: capital_structure_summary(text); Type: FUNCTION; Schema: public; Owner: stocktotal
@@ -478,6 +485,170 @@ $_$;
 
 
 ALTER FUNCTION public.evaluation_index(stock_code text) OWNER TO stocktotal;
+
+--
+-- Name: expected_price_range(text); Type: FUNCTION; Schema: public; Owner: stocktotal
+--
+
+CREATE FUNCTION expected_price_range(stock_code text) RETURNS TABLE(highest_expected_price double precision, lowest_expected_price double precision)
+    LANGUAGE sql
+    AS $_$
+with ExpectedRoeRange as
+(
+    select * from expected_roe_range($1)
+)
+select 
+    X.roe / Y.avg_highest_expected_roe * X.book_value as highest_expected_price,
+    X.roe / Y.avg_lowest_expected_roe * X.book_value as lowest_expected_price
+from 
+(
+    select roe, yearly_highest_price, yearly_lowest_price, book_value from ExpectedRoeRange where activity_year in 
+    (
+        select max(activity_year) from ExpectedRoeRange
+    ) 
+) as X,
+(
+    select 
+        avg(highest_expected_roe) as avg_highest_expected_roe, 
+        avg(lowest_expected_roe) as avg_lowest_expected_roe
+    from ExpectedRoeRange
+) as Y
+$_$;
+
+
+ALTER FUNCTION public.expected_price_range(stock_code text) OWNER TO stocktotal;
+
+--
+-- Name: expected_roe_range(text); Type: FUNCTION; Schema: public; Owner: stocktotal
+--
+
+CREATE FUNCTION expected_roe_range(stock_code text) RETURNS TABLE(activity_year double precision, roe double precision, yearly_highest_price double precision, yearly_lowest_price double precision, book_value double precision, highest_expected_roe double precision, lowest_expected_roe double precision)
+    LANGUAGE sql
+    AS $_$
+select 
+    X.activity_year, 
+    X.roe, 
+    X.yearly_highest_price, 
+    X.yearly_lowest_price, 
+    Y.book_value,
+    X.roe / X.yearly_highest_price * Y.book_value as highest_expected_roe,
+    X.roe / X.yearly_lowest_price * Y.book_value as lowest_expected_roe
+from
+(
+    with YearlyRoe as 
+    (
+        with Roe as 
+        (
+            select activity_date, roe from roe($1)
+        )
+        select activity_date, roe from Roe where activity_date in 
+        (
+            select A.activity_date from 
+            (
+                select 
+                    date_part('year', activity_date) as activity_year, 
+                    max(activity_date) as activity_date
+                from Roe group by activity_year
+            ) as A
+        )
+    )
+    select 
+        A.activity_year,
+        A.yearly_highest_price, 
+        A.yearly_lowest_price,
+        B.roe
+    from 
+    (
+        select 
+            date_part('year', activity_date) as activity_year,
+            max(high) as yearly_highest_price, 
+            min(low) as yearly_lowest_price 
+        from HistoricalPrices where stock_code = $1
+        group by activity_year
+    ) as A,
+    YearlyRoe as B
+    where A.activity_year = date_part('year', B.activity_date)
+) as X,
+(
+    with BookValue as 
+    (
+        with T as
+        (
+            select 
+                P.activity_date, 
+                P.report_date, 
+                P.equity,
+                P.common_stock_capital,
+                coalesce(Q.preferred_stock_capital, 0) as preferred_stock_capital
+            from 
+                (
+                    select
+                        A.activity_date,
+                        A.report_date,
+                        A.number as equity,
+                        B.number as common_stock_capital
+                    from
+                        BalanceSheet as A,
+                        BalanceSheet as B
+                    where
+                        A.stock_code = B.stock_code
+                        and A.activity_date = B.activity_date
+                        and A.report_date = B.report_date
+                        and A.item = '股東權益總計'
+                        and B.item = '普通股股本'
+                        and A.report_type = 'C'
+                        and B.report_type = 'C'
+                        and A.stock_code = $1
+                        and A.number != 0
+                        and B.number != 0
+                ) as P
+            left join
+                (
+                    select
+                        activity_date,
+                        report_date,
+                        sum(number) as preferred_stock_capital
+                    from BalanceSheet
+                    where
+                        report_type = 'C'
+                        and stock_code = $1
+                        and item in ('少數股權')
+                    group by activity_date, report_date
+                ) as Q
+            on 
+                P.activity_date = Q.activity_date 
+                and P.report_date = Q.report_date
+        )
+        select
+            T.activity_date,
+            (T.equity - T.preferred_stock_capital)/T.common_stock_capital * 10 as book_value
+        from
+            T,
+            (
+                select activity_date, max(report_date) as report_date from T
+                group by activity_date
+            ) as U
+        where
+            T.activity_date = U.activity_date
+            and T.report_date = U.report_date
+    )
+    select date_part('year', activity_date) as activity_year, book_value from BookValue where activity_date in 
+    (
+        select A.activity_date from 
+        (
+            select 
+                date_part('year', activity_date) as activity_year, 
+                max(activity_date) as activity_date
+            from BookValue group by activity_year
+        ) as A
+    )
+) as Y
+where X.activity_year = Y.activity_year
+order by X.activity_year desc
+$_$;
+
+
+ALTER FUNCTION public.expected_roe_range(stock_code text) OWNER TO stocktotal;
 
 --
 -- Name: financial_structure(text); Type: FUNCTION; Schema: public; Owner: stocktotal
@@ -991,6 +1162,25 @@ CREATE TABLE cashflowstmt (
 ALTER TABLE public.cashflowstmt OWNER TO stocktotal;
 
 --
+-- Name: historicalprices; Type: TABLE; Schema: public; Owner: stocktotal; Tablespace: 
+--
+
+CREATE TABLE historicalprices (
+    creation_dt timestamp without time zone DEFAULT now(),
+    stock_code text NOT NULL,
+    activity_date date NOT NULL,
+    open double precision,
+    high double precision,
+    low double precision,
+    close double precision,
+    volume double precision,
+    adj_close double precision
+);
+
+
+ALTER TABLE public.historicalprices OWNER TO stocktotal;
+
+--
 -- Name: incomestmt; Type: TABLE; Schema: public; Owner: stocktotal; Tablespace: 
 --
 
@@ -1023,6 +1213,26 @@ CREATE TABLE listedcostatistics (
 
 
 ALTER TABLE public.listedcostatistics OWNER TO stocktotal;
+
+--
+-- Name: listedcotradinginfo; Type: TABLE; Schema: public; Owner: stocktotal; Tablespace: 
+--
+
+CREATE TABLE listedcotradinginfo (
+    creation_dt timestamp without time zone DEFAULT now(),
+    stock_code text NOT NULL,
+    activity_date date NOT NULL,
+    highest_price double precision,
+    lowest_price double precision,
+    weighted_average_price double precision,
+    trans double precision,
+    trade_value double precision,
+    trade_volume double precision,
+    turnover_ratio double precision
+);
+
+
+ALTER TABLE public.listedcotradinginfo OWNER TO stocktotal;
 
 --
 -- Name: marketstatistics; Type: TABLE; Schema: public; Owner: stocktotal; Tablespace: 
@@ -1153,6 +1363,14 @@ ALTER TABLE ONLY cashflowstmt
 
 
 --
+-- Name: historicalprices_stock_code_activity_date_key; Type: CONSTRAINT; Schema: public; Owner: stocktotal; Tablespace: 
+--
+
+ALTER TABLE ONLY historicalprices
+    ADD CONSTRAINT historicalprices_stock_code_activity_date_key UNIQUE (stock_code, activity_date);
+
+
+--
 -- Name: incomestmt_stock_code_report_type_report_date_activity_date_key; Type: CONSTRAINT; Schema: public; Owner: stocktotal; Tablespace: 
 --
 
@@ -1166,6 +1384,14 @@ ALTER TABLE ONLY incomestmt
 
 ALTER TABLE ONLY listedcostatistics
     ADD CONSTRAINT listedcostatistics_report_date_stock_code_key UNIQUE (report_date, stock_code);
+
+
+--
+-- Name: listedcotradinginfo_stock_code_activity_date_key; Type: CONSTRAINT; Schema: public; Owner: stocktotal; Tablespace: 
+--
+
+ALTER TABLE ONLY listedcotradinginfo
+    ADD CONSTRAINT listedcotradinginfo_stock_code_activity_date_key UNIQUE (stock_code, activity_date);
 
 
 --
@@ -1279,6 +1505,16 @@ GRANT ALL ON TABLE cashflowstmt TO PUBLIC;
 
 
 --
+-- Name: historicalprices; Type: ACL; Schema: public; Owner: stocktotal
+--
+
+REVOKE ALL ON TABLE historicalprices FROM PUBLIC;
+REVOKE ALL ON TABLE historicalprices FROM stocktotal;
+GRANT ALL ON TABLE historicalprices TO stocktotal;
+GRANT ALL ON TABLE historicalprices TO PUBLIC;
+
+
+--
 -- Name: incomestmt; Type: ACL; Schema: public; Owner: stocktotal
 --
 
@@ -1295,6 +1531,16 @@ GRANT ALL ON TABLE incomestmt TO PUBLIC;
 REVOKE ALL ON TABLE listedcostatistics FROM PUBLIC;
 REVOKE ALL ON TABLE listedcostatistics FROM stocktotal;
 GRANT ALL ON TABLE listedcostatistics TO PUBLIC;
+
+
+--
+-- Name: listedcotradinginfo; Type: ACL; Schema: public; Owner: stocktotal
+--
+
+REVOKE ALL ON TABLE listedcotradinginfo FROM PUBLIC;
+REVOKE ALL ON TABLE listedcotradinginfo FROM stocktotal;
+GRANT ALL ON TABLE listedcotradinginfo TO stocktotal;
+GRANT ALL ON TABLE listedcotradinginfo TO PUBLIC;
 
 
 --

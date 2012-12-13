@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import logging
 import sys
 
@@ -16,8 +18,3 @@ def config_root(level=logging.INFO,
     stdout_handler.setLevel(level)
     stdout_handler.setFormatter(logging.Formatter(format, datefmt))
     root.addHandler(stdout_handler)
-
-    #stderr_handler = logging.StreamHandler(sys.stderr)
-    #stderr_handler.setLevel(logging.ERROR)
-    #stderr_handler.setFormatter(logging.Formatter(format, datefmt))
-    #root.addHandler(stderr_handler)
