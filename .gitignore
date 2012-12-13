@@ -6,10 +6,10 @@
 /db/postgres/*.backup
 /report/build/
 /report/core/.settings/
-/report/core/config/StocktotalReport.jasper
-/report/core/lib/
 /report/core/.classpath
 /report/core/.project
+/report/core/config/StocktotalReport.jasper
+/report/core/lib/font-kaiu.jar
 /report/logfile/
 /report/report/
 /source/core/__pycache__/
@@ -24,4 +24,3 @@
 /source/core/source/__pycache__/
 /source/core/thirdparty/
 /thirdparty/
-/tools/pdfbox/
