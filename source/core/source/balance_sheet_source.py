@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from . import stmt_source
 
 class BalanceSheetSource(stmt_source.StmtSource):

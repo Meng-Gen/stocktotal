@@ -1,3 +1,5 @@
+# coding: utf-8
+
 def is_float(test_str):
     try:
         float(test_str)

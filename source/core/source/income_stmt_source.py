@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from . import stmt_source
 
 class IncomeStmtSource(stmt_source.StmtSource):

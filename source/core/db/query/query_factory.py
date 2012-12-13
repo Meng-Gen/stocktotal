@@ -1,4 +1,7 @@
+# coding: utf-8
+
 from .. import db_config
+
 db_type = db_config.DB_TYPE
 
 if db_type == 'sqlite':

@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import csv
 import logging
 import os
@@ -77,14 +79,14 @@ class CashFlowStmtSource(stmt_source.StmtSource):
 
         xpath_stmt = table.xpath('//body/table[@class="hasBorder"]/tr/td/pre/text()')
         if len(xpath_stmt) is 1:
-            with open(dest_file, 'w', encoding='utf-8') as fd:
-                fd.write(xpath_stmt[0].strip())
+            with open(dest_file, 'wb') as fd:
+                fd.write(xpath_stmt[0].strip().encode('utf-8'))
             return
 
         xpath_no_record = table.xpath('//body/center/h3/text()')
         if len(xpath_no_record) is 1:
-            with open(dest_file, 'w', encoding='utf-8') as fd:
-                fd.write(xpath_no_record[0].strip())
+            with open(dest_file, 'wb') as fd:
+                fd.write(xpath_no_record[0].strip().encode('utf-8'))
             return
             
     def source_txt_to_csv(self, src_dir, dest_dir, stock_code):

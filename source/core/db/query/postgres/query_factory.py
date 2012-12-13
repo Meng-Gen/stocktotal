@@ -1,3 +1,5 @@
+# coding: utf-8
+
 class QueryFactory():
     @staticmethod
     def roe_query():
