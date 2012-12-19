@@ -1,8 +1,7 @@
 <script type="text/javascript">
     AmCharts.ready(function () {
         var chart = new AmCharts.AmSerialChart();
-        chart.pathToImages = "./thirdparty/amcharts_2.8.2/amcharts/images/";
-        chart.dataProvider = <?php echo convert_to_chartdata($financial_structure_dataset); ?>;
+        chart.dataProvider = <?php echo convert_to_chartdata($dataset['financial_structure']); ?>;
         chart.categoryField = "date";
         chart.addTitle("Financial Structure Analysis");
        
@@ -11,7 +10,6 @@
         categoryAxis.minPeriod = "DD";
         categoryAxis.dashLength = 2;
         categoryAxis.gridAlpha = 0.15;
-        
         categoryAxis.axisColor = "#DADADA";
 
         var primaryValueAxis = new AmCharts.ValueAxis();
@@ -21,10 +19,17 @@
 
         var secondaryValueAxis = new AmCharts.ValueAxis();
         secondaryValueAxis.position = "right";
-        secondaryValueAxis.gridAlpha = 0;
         secondaryValueAxis.axisThickness = 2;
+        secondaryValueAxis.gridAlpha = 0;
         chart.addValueAxis(secondaryValueAxis);
 
+        var guide1 = new AmCharts.Guide();
+        guide1.value = 0.5;
+        guide1.dashLength = 4;
+        guide1.inside = true;
+        guide1.lineAlpha = 1;
+        primaryValueAxis.addGuide(guide1);
+        
         // equity ratio graph
         var graph1 = new AmCharts.AmGraph();
         graph1.valueAxis = primaryValueAxis;
@@ -46,8 +51,8 @@
         // equity multiplier graph                
         var graph3 = new AmCharts.AmGraph();
         graph3.valueAxis = secondaryValueAxis;
-        graph3.title = "Equity Multiplier";
         graph3.valueField = "equity_multiplier";
+        graph3.title = "Equity Multiplier";
         graph3.bullet = "square";
         graph3.hideBulletsCount = 30;
         chart.addGraph(graph3);
