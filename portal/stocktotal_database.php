@@ -8,7 +8,7 @@
                 $this->db_impl = new StocktotalPostgres;
             } 
             else {
-                throw new Exception("Please add support for your database type");
+                echo "Please add support for your database type";
             }
         }
 
