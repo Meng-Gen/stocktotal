@@ -889,7 +889,7 @@ from
     W,
     (
         select
-            W1.activity_date,
+            W2.activity_date,
             W2.income / W1.income - 1 as income_yoy,
             W2.accumlated_income / W1.accumlated_income - 1 as accumlated_income_yoy
         from
