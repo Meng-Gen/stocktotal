@@ -56,6 +56,7 @@
         include 'report/operating_income_data.php';
         include 'report/profit_margin_chart.php';
         include 'report/profit_margin_data.php';
+        include 'report/cash_flow_chart.php';
         include 'report/cash_flow_data.php';
         include 'report/ccc_chart.php';
         include 'report/ccc_data.php';
@@ -140,6 +141,8 @@
         
         <h1>Cash Flow Analysis</h1>
         <p></p>
+        <div id="cash_flow_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
         <div id="cash_flow_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
         
