@@ -50,7 +50,10 @@
         include 'report/nonoperating_income_data.php';
         include 'report/long_term_investments_chart.php';
         include 'report/long_term_investments_data.php';
-        include 'report/operating_income_chart.php';
+        include 'report/operating_income_ma_chart.php';
+        include 'report/operating_income_yoy_chart.php';
+        include 'report/operating_income_acc_yoy_chart.php';
+        include 'report/operating_income_data.php';
         include 'report/profit_margin_chart.php';
         include 'report/profit_margin_data.php';
         include 'report/cash_flow_data.php';
@@ -58,19 +61,17 @@
         include 'report/ccc_data.php';
         include 'report/evaluation_index_data.php';
         include 'report/stock_dividend_data.php';
-        
         include 'report/capital_structure_summary_chart.php';
         include 'report/capital_structure_summary_data.php';
-        
         include 'report/expected_roe_range_data.php';
         include 'report/expected_price_range_data.php';
     ?>
 </head>
 <body id="dt_example">
     <div id="container">
-        <div class="full_width big">Stocktotal Analysis</div>
+        <div class="full_width big">Stocktotal Analysis: <?php echo $stock_code; ?></div>
         
-        <h1>Taiwan Stock Code (Default: <?php echo "2330"; ?>)</h1>
+        <h1>Taiwan Stock Code (Default: <?php echo $DEFAULT_STOCK_CODE; ?>)</h1>
         <p></p>
         <form action="report.php" method="post">
             <input type="text" name="stock_code" value="" />
@@ -121,7 +122,13 @@
         
         <h1>Operating Income Analysis</h1>
         <p></p>
-        <div id="operating_income_chart_div" style="width:600px; height:400px;"></div>
+        <div id="operating_income_ma_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
+        <div id="operating_income_yoy_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
+        <div id="operating_income_acc_yoy_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
+        <div id="operating_income_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
         
         <h1>Profit Margin Analysis</h1>
