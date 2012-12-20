@@ -33,6 +33,6 @@
         legend.marginLeft = 110;
         chart.addLegend(legend);
 
-        chart.write("nonoperating_income_report_div");
+        chart.write("nonoperating_income_chart_div");
     });
 </script>   

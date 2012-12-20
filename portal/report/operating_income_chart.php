@@ -1,9 +1,9 @@
 <script type="text/javascript">
     AmCharts.ready(function () {
         var chart = new AmCharts.AmSerialChart();
-        chart.dataProvider = <?php echo convert_to_chartdata($dataset['profit_margin']); ?>;
+        chart.dataProvider = <?php echo convert_to_chartdata($dataset['operating_income']); ?>;
         chart.categoryField = "date";
-        chart.addTitle("Profit Margin Analysis");
+        chart.addTitle("Operating Income Analysis");
        
         var categoryAxis = chart.categoryAxis;
         categoryAxis.parseDates = true;
@@ -18,29 +18,25 @@
         chart.addValueAxis(valueAxis);
 
         var graph1 = new AmCharts.AmGraph();
-        graph1.valueAxis = valueAxis;
-        graph1.valueField = "gross_profit_margin";
-        graph1.title = "Gross Profit Margin";
-        graph1.bullet = "round";
-        graph1.hideBulletsCount = 30;
+        graph1.valueAxis = valueAxis; 
+        graph1.valueField = "ma3_income";
+        graph1.title = "MA3";
+        graph1.lineThickness = 2;
         chart.addGraph(graph1);
-
+        
         var graph2 = new AmCharts.AmGraph();
         graph2.valueAxis = valueAxis; 
-        graph2.valueField = "operating_profit_margin";
-        graph2.title = "Operating Profit Margin";
-        graph2.bullet = "triangleUp";
-        graph2.hideBulletsCount = 30;
+        graph2.valueField = "ma12_income";
+        graph2.title = "MA12";
+        graph2.lineThickness = 2;
         chart.addGraph(graph2);
-        
+
         var graph3 = new AmCharts.AmGraph();
-        graph3.valueAxis = valueAxis; 
-        graph3.valueField = "net_profit_margin";
-        graph3.title = "Net Profit Margin";
-        graph3.bullet = "square";
-        graph3.hideBulletsCount = 30;
-        graph3.lineAlpha = 1;
-        graph3.fillAlphas = 0.1;
+        graph3.valueAxis = valueAxis;
+        graph3.valueField = "income";
+        graph3.title = "Operating Income";
+        graph3.type = "column";
+        graph3.hidden = true; 
         chart.addGraph(graph3);
         
         chartCursor = new AmCharts.ChartCursor();
@@ -51,6 +47,6 @@
         legend.marginLeft = 110;
         chart.addLegend(legend);
 
-        chart.write("profit_margin_report_div");
+        chart.write("operating_income_chart_div");
     });
 </script>   

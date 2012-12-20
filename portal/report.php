@@ -1,17 +1,14 @@
 <html>
 <head>
     <title>Stocktotal Report Portal</title>
-
-    <center>
-    <form action="report.php" method="post">
-        <input type="text" name="stock_code" value="" />
-        <input type="submit" name="submit" value="Submit" />
-    </form>
-    </center>
-
+    <style type="text/css" title="currentStyle">
+        @import "./css/demo_page.css";
+        @import "./css/demo_table.css";
+    </style>
     <?php
         include 'stocktotal_database.php';
         include 'amchart_glue.php';
+        include 'datatables_glue.php';
         
         $DEFAULT_STOCK_CODE = '2330';
         
@@ -43,42 +40,84 @@
         );
         
         // generate reports
-        include 'roe_report.php'; 
-        include 'financial_structure_report.php';
-        include 'current_and_rapid_ratio_report.php';
-        include 'nonoperating_income_report.php';
-        include 'long_term_investments_report.php';
-        include 'operating_income_report.php';
-        include 'profit_margin_report.php';
-        include 'ccc_report.php';
+        include 'report/roe_chart.php'; 
+        include 'report/roe_data.php'; 
+        include 'report/financial_structure_chart.php';
+        include 'report/current_and_rapid_ratio_chart.php';
+        include 'report/nonoperating_income_chart.php';
+        include 'report/long_term_investments_chart.php';
+        include 'report/operating_income_chart.php';
+        include 'report/profit_margin_chart.php';
+        include 'report/ccc_chart.php';
     ?>
 </head>
-<body>
-    <center>
-    <h1>
-    <?php 
-        echo "Stocktotal Analysis: " . $stock_code; 
-        if ((strcmp($stock_code, $DEFAULT_STOCK_CODE) == 0)) {
-            echo " (default)";
-        }
-    ?>
-    </h1>
-    <hr/><p/>
-    <div id="roe_report_div" style="width:600px; height:400px;"></div>
-    <hr/><p/>
-    <div id="financial_structure_report_div" style="width:600px; height:400px;"></div>
-    <hr/><p/>
-    <div id="current_and_rapid_ratio_report_div" style="width:600px; height:400px;"></div>
-    <hr/><p/>
-    <div id="nonoperating_income_report_div" style="width:600px; height:400px;"></div>
-    <hr/><p/>
-    <div id="long_term_investments_report_div" style="width:600px; height:400px;"></div>
-    <hr/><p/>
-    <div id="operating_income_report_div" style="width:600px; height:400px;"></div>
-    <hr/><p/>
-    <div id="profit_margin_report_div" style="width:600px; height:400px;"></div>
-    <hr/><p/>
-    <div id="ccc_report_div" style="width:600px; height:400px;"></div>
-    </center>
+<body id="dt_example">
+    <div id="container">
+        <div class="full_width big">Stocktotal Analysis</div>
+        
+        <h1>Taiwan Stock Code (Default: <?php echo "2330"; ?>)</h1>
+        <p></p>
+        <form action="report.php" method="post">
+            <input type="text" name="stock_code" value="" />
+            <input type="submit" name="submit" value="Submit" />
+        </form>
+        
+        <h1>ROE Analysis</h1>
+        <p>
+            There are three components in the calculation of ROE: the net profit margin, the asset turnover, and the equity multiplier.
+        </p>
+        <div id="roe_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
+        <div id="roe_data_div" style="width:600px;"></div>
+        <div class="spacer"></div>
+        
+        <h1>Financial Structure Analysis</h1>
+        <p>
+            The equity ratio should be larger than 50%.
+        </p>
+        <div id="financial_structure_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
+        
+        <h1>Current/Rapid Ratio Analysis</h1>
+        <p>
+            The current ratio should be larger than 1. 
+            The rapid ratio should be larger than 2.
+        </p>
+        <div id="current_and_rapid_ratio_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
+        
+        <h1>Nonoperating Income Analysis</h1>
+        <p></p>
+        <div id="nonoperating_income_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
+        
+        <h1>Long-term Investments Analysis</h1>
+        <p></p>
+        <div id="long_term_investments_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
+        
+        <h1>Operating Income Analysis</h1>
+        <p></p>
+        <div id="operating_income_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
+        
+        <h1>Profit Margin Analysis</h1>
+        <p></p>
+        <div id="profit_margin_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
+        
+        <h1>Cash Conversion Cycle Analysis</h1>
+        <p>
+            The cash conversion cycle (CCC) measures how long a firm will be deprived of cash if it increases its investment in resources in order to expand customer sales.  
+            It is thus a measure of the liquidity risk entailed by growth. 
+        </p>
+        <div id="ccc_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
+    </div>
+    
+    <div id="footer" class="clear" style="text-align:center;">
+        Stocktotal Report Portal designed and created by Meng-Gen &copy; 2012<br><br>
+    </div>
+</div>
 </body>
 </html>

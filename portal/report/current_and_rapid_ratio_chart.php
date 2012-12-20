@@ -55,6 +55,6 @@
         legend.marginLeft = 110;
         chart.addLegend(legend);
 
-        chart.write("current_and_rapid_ratio_report_div");
+        chart.write("current_and_rapid_ratio_chart_div");
     });
 </script>   

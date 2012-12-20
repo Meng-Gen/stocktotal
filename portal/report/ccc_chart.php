@@ -65,6 +65,6 @@
         legend.marginLeft = 110;
         chart.addLegend(legend);
 
-        chart.write("ccc_report_div");
+        chart.write("ccc_chart_div");
     });
 </script>

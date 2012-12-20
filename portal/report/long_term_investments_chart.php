@@ -33,6 +33,6 @@
         legend.marginLeft = 110;
         chart.addLegend(legend);
 
-        chart.write("long_term_investments_report_div");
+        chart.write("long_term_investments_chart_div");
     });
 </script>   
