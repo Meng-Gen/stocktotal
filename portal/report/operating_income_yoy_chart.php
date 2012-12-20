@@ -31,14 +31,14 @@
         primaryValueAxis.addGuide(guide1);
         
         var graph1 = new AmCharts.AmGraph();
-        graph1.valueAxis = primaryValueAxis; 
+        graph1.valueAxis = secondaryValueAxis; 
         graph1.valueField = "income_yoy";
         graph1.title = "YoY";
         graph1.lineThickness = 2;
         chart.addGraph(graph1);
 
         var graph2 = new AmCharts.AmGraph();
-        graph2.valueAxis = secondaryValueAxis;
+        graph2.valueAxis = primaryValueAxis;
         graph2.valueField = "income";
         graph2.title = "Operating Income";
         graph2.type = "column";
