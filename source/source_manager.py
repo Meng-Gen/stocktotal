@@ -22,7 +22,7 @@ class SourceManager():
         s = source.CashFlowStmtSource()        
         begin_date = self.__get_stmt_source_begin_date(period)
         end_date = self.__get_stmt_source_end_date(period)
-        for stock_code in  self.__get_stock_codes(stock):
+        for stock_code in self.__get_stock_codes(stock):
             self.LOGGER.info('''Stock Code: {stock_code}'''.format(stock_code = stock_code))
             if content == 'all':
                 s.source(stock_code, begin_date, end_date)
@@ -37,7 +37,7 @@ class SourceManager():
         s = source.IncomeStmtSource()       
         begin_date = self.__get_stmt_source_begin_date(period)
         end_date = self.__get_stmt_source_end_date(period)
-        for stock_code in  self.__get_stock_codes(stock):
+        for stock_code in self.__get_stock_codes(stock):
             self.LOGGER.info('''Stock Code: {stock_code}'''.format(stock_code = stock_code))
             if content == 'all':
                 s.source(stock_code, begin_date, end_date)
@@ -52,7 +52,7 @@ class SourceManager():
         s = source.BalanceSheetSource()
         begin_date = self.__get_stmt_source_begin_date(period)
         end_date = self.__get_stmt_source_end_date(period)
-        for stock_code in  self.__get_stock_codes(stock):
+        for stock_code in self.__get_stock_codes(stock):
             self.LOGGER.info('''Stock Code: {stock_code}'''.format(stock_code = stock_code))
             if content == 'all':
                 s.source(stock_code, begin_date, end_date)
@@ -95,21 +95,21 @@ class SourceManager():
         s = source.CapitalStructureSource()
         begin_date = '1989-01-01'
         end_date = str(date_util.get_this_month())
-        for stock_code in  self.__get_stock_codes(stock):
+        for stock_code in self.__get_stock_codes(stock):
             self.LOGGER.info('''Stock Code: {stock_code}'''.format(stock_code = stock_code))
             s.source(stock_code, begin_date, end_date) 
 
     def source_capital_structure_summary(self, stock):
         import core.source.capital_structure_summary_source as source
         s = source.CapitalStructureSummarySource()
-        for stock_code in  self.__get_stock_codes(stock):
+        for stock_code in self.__get_stock_codes(stock):
             self.LOGGER.info('''Stock Code: {stock_code}'''.format(stock_code = stock_code))
             s.source(stock_code) 
 
     def source_stock_dividend(self, stock):
         import core.source.stock_dividend_source as source
         s = source.StockDividendSource()
-        for stock_code in  self.__get_stock_codes(stock):
+        for stock_code in self.__get_stock_codes(stock):
             self.LOGGER.info('''Stock Code: {stock_code}'''.format(stock_code = stock_code))
             s.source(stock_code) 
             
