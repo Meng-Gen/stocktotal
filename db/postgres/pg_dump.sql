@@ -84,7 +84,7 @@ ALTER FUNCTION public.capital_structure_summary(stock_code text) OWNER TO stockt
 -- Name: cash_flow(text); Type: FUNCTION; Schema: public; Owner: stocktotal
 --
 
-CREATE FUNCTION cash_flow(stock_code text) RETURNS TABLE(activity_date date, operating double precision, investing double precision, financing double precision, free_cash_flow double precision, cash_flow double precision, net_profit double precision, net_profit_minus_operating double precision)
+CREATE FUNCTION cash_flow(stock_code text) RETURNS TABLE(activity_date date, operating double precision, investing double precision, financing double precision, free_cash_flow double precision, cash_flow double precision, net_profit double precision, operating_minus_net_profit double precision)
     LANGUAGE sql
     AS $_$
 with T as
@@ -129,7 +129,7 @@ select
     T.operating + T.investing as free_cash_flow,
     T.operating + T.investing + T.financing as cash_flow,
     T.net_profit,
-    T.net_profit - T.operating as net_profit_minus_operating
+    T.operating - T.net_profit as operating_minus_net_profit
 from
     T,
     (

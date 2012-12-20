@@ -11,7 +11,7 @@
                 { "sTitle": "Free Cash Flow", "sClass": "center" },
                 { "sTitle": "Cash Flow", "sClass": "center" },
                 { "sTitle": "Net Profit", "sClass": "center" },
-                { "sTitle": "Net Profit Minus Operating", "sClass": "center" },
+                { "sTitle": "Operating Minus Net Profit", "sClass": "center" },
             ],
             "bPaginate": false,
             "aaSorting": [ [0,'desc'], ],
