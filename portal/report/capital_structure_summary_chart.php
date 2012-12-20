@@ -44,7 +44,7 @@
         graph3.valueAxis = valueAxis; 
         graph3.valueField = "capitalization_reserve_and_others_ratio";
         graph3.title = "Cap. Reserve and Others Ratio";
-        graph3.bullet = "triangleUp";
+        graph3.bullet = "square";
         graph3.hideBulletsCount = 30;
         chart.addGraph(graph3);
         
