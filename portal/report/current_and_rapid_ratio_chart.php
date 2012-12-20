@@ -1,7 +1,7 @@
 <script type="text/javascript">
     AmCharts.ready(function () {
         var chart = new AmCharts.AmSerialChart();
-        chart.dataProvider = <?php echo convert_to_chartdata($dataset['current_and_rapid_ratio']); ?>;
+        chart.dataProvider = <?php echo amchart_encode($dataset['current_and_rapid_ratio']); ?>;
         chart.categoryField = "date";
         chart.addTitle("Current/Rapid Ratio Analysis");
        

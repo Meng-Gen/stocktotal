@@ -1,7 +1,7 @@
 <script type="text/javascript">
     AmCharts.ready(function () {
         var chart = new AmCharts.AmSerialChart();
-        chart.dataProvider = <?php echo convert_to_chartdata($dataset['profit_margin']); ?>;
+        chart.dataProvider = <?php echo amchart_encode($dataset['profit_margin']); ?>;
         chart.categoryField = "date";
         chart.addTitle("Profit Margin Analysis");
        

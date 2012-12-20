@@ -1,7 +1,7 @@
 <script type="text/javascript">
     AmCharts.ready(function () {
         var chart = new AmCharts.AmSerialChart();
-        chart.dataProvider = <?php echo convert_to_chartdata($dataset['long_term_investments']); ?>;
+        chart.dataProvider = <?php echo amchart_encode($dataset['long_term_investments']); ?>;
         chart.categoryField = "date";
         chart.addTitle("Long-term Investments Analysis");
        
@@ -16,7 +16,7 @@
         valueAxis.axisThickness = 2;
         valueAxis.gridAlpha = 0;
         chart.addValueAxis(valueAxis);
-
+        
         var graph = new AmCharts.AmGraph();
         graph.valueAxis = valueAxis;
         graph.valueField = "long_term_investments_ratio";

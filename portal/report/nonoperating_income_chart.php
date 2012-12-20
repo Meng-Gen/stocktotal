@@ -1,7 +1,7 @@
 <script type="text/javascript">
     AmCharts.ready(function () {
         var chart = new AmCharts.AmSerialChart();
-        chart.dataProvider = <?php echo convert_to_chartdata($dataset['nonoperating_income']); ?>;
+        chart.dataProvider = <?php echo amchart_encode($dataset['nonoperating_income']); ?>;
         chart.categoryField = "date";
         chart.addTitle("Non-operating Income Analysis");
        

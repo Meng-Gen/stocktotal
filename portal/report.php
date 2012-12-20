@@ -39,16 +39,31 @@
             'expected_price_range'      => $db->query_expected_price_range($stock_code),
         );
         
-        // generate reports
+        // generate report components
         include 'report/roe_chart.php'; 
         include 'report/roe_data.php'; 
         include 'report/financial_structure_chart.php';
+        include 'report/financial_structure_data.php';
         include 'report/current_and_rapid_ratio_chart.php';
+        include 'report/current_and_rapid_ratio_data.php';
         include 'report/nonoperating_income_chart.php';
+        include 'report/nonoperating_income_data.php';
         include 'report/long_term_investments_chart.php';
+        include 'report/long_term_investments_data.php';
         include 'report/operating_income_chart.php';
         include 'report/profit_margin_chart.php';
+        include 'report/profit_margin_data.php';
+        include 'report/cash_flow_data.php';
         include 'report/ccc_chart.php';
+        include 'report/ccc_data.php';
+        include 'report/evaluation_index_data.php';
+        include 'report/stock_dividend_data.php';
+        
+        include 'report/capital_structure_summary_chart.php';
+        include 'report/capital_structure_summary_data.php';
+        
+        include 'report/expected_roe_range_data.php';
+        include 'report/expected_price_range_data.php';
     ?>
 </head>
 <body id="dt_example">
@@ -77,6 +92,8 @@
         </p>
         <div id="financial_structure_chart_div" style="width:600px; height:400px;"></div>
         <div class="spacer"></div>
+        <div id="financial_structure_data_div" style="width:600px;"></div>
+        <div class="spacer"></div>
         
         <h1>Current/Rapid Ratio Analysis</h1>
         <p>
@@ -85,15 +102,21 @@
         </p>
         <div id="current_and_rapid_ratio_chart_div" style="width:600px; height:400px;"></div>
         <div class="spacer"></div>
+        <div id="current_and_rapid_ratio_data_div" style="width:600px;"></div>
+        <div class="spacer"></div>
         
-        <h1>Nonoperating Income Analysis</h1>
+        <h1>Non-operating Income Analysis</h1>
         <p></p>
         <div id="nonoperating_income_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>        
+        <div id="nonoperating_income_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
         
         <h1>Long-term Investments Analysis</h1>
         <p></p>
         <div id="long_term_investments_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
+        <div id="long_term_investments_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
         
         <h1>Operating Income Analysis</h1>
@@ -105,6 +128,13 @@
         <p></p>
         <div id="profit_margin_chart_div" style="width:600px; height:400px;"></div>
         <div class="spacer"></div>
+        <div id="profit_margin_data_div" style="width:600px;"></div>
+        <div class="spacer"></div>
+        
+        <h1>Cash Flow Analysis</h1>
+        <p></p>
+        <div id="cash_flow_data_div" style="width:600px;"></div>
+        <div class="spacer"></div>
         
         <h1>Cash Conversion Cycle Analysis</h1>
         <p>
@@ -112,6 +142,32 @@
             It is thus a measure of the liquidity risk entailed by growth. 
         </p>
         <div id="ccc_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
+        <div id="ccc_data_div" style="width:600px;"></div>
+        <div class="spacer"></div>
+        
+        <h1>Evaluation Index Analysis</h1>
+        <p></p>
+        <div id="evaluation_index_data_div" style="width:600px;"></div>
+        <div class="spacer"></div>
+
+        <h1>Stock Dividend</h1>
+        <p></p>
+        <div id="stock_dividend_data_div" style="width:600px;"></div>
+        <div class="spacer"></div>
+        
+        <h1>Capital Structure Summary</h1>
+        <p></p>
+        <div id="capital_structure_summary_chart_div" style="width:600px; height:400px;"></div>
+        <div class="spacer"></div>
+        <div id="capital_structure_summary_data_div" style="width:600px;"></div>
+        <div class="spacer"></div>
+
+        <h1>Investment Strategy</h1>
+        <p></p>
+        <div id="expected_roe_range_data_div" style="width:600px;"></div>
+        <div class="spacer"></div>
+        <div id="expected_price_range_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
     </div>
     
