@@ -4,6 +4,7 @@
 /db/postgres/init.sql
 /db/postgres/schema.sql
 /db/postgres/*.backup
+/portal/thirdparty/
 /report/build/
 /report/core/.settings/
 /report/core/.classpath
