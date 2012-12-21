@@ -16,21 +16,7 @@
         valueAxis.axisThickness = 2;
         valueAxis.gridAlpha = 0;
         chart.addValueAxis(valueAxis);
-/*
-        var guide1 = new AmCharts.Guide();
-        guide1.value = 2;
-        guide1.dashLength = 4;
-        guide1.inside = true;
-        guide1.lineAlpha = 1;
-        valueAxis.addGuide(guide1);
-        
-        var guide2 = new AmCharts.Guide();
-        guide2.value = 1;
-        guide2.dashLength = 4;
-        guide2.inside = true;
-        guide2.lineAlpha = 1;
-        valueAxis.addGuide(guide2);
-*/        
+       
         var graph1 = new AmCharts.AmGraph();
         graph1.valueAxis = valueAxis;
         graph1.valueField = "close";
