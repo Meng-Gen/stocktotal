@@ -39,7 +39,7 @@ class HistoricalPricesSource():
 
     def source_delta(self, stock_code, market_category, begin_date, end_date):
         self.source_url_to_csv_delta(self.DELTA_DIR, stock_code, market_category, begin_date, end_date)
-        self.source_csv_to_db(self.DELTA_DIR, self.DB_INSERTION, stock_code, market_category)
+        self.source_csv_to_db(self.DELTA_DIR, self.DB_INSERTION, stock_code)
         
     def source_url_to_html(self, dest_dir, stock_code, market_category):
         if not os.path.exists(dest_dir):
