@@ -22,9 +22,9 @@ public class ArgParser {
                 .create("s");
         stock.setLongOpt("stock");
         
-        Option type = OptionBuilder.withArgName("types")
+        Option type = OptionBuilder.withArgName("type")
                 .hasArgs()
-                .withDescription("set report types (default: pdf)")
+                .withDescription("set report type (default: pdf)")
                 .create("t");
         type.setLongOpt("type");
         
