@@ -37,6 +37,7 @@
             'capital_structure_summary' => $db->query_capital_structure_summary($stock_code),
             'expected_roe_range'        => $db->query_expected_roe_range($stock_code),
             'expected_price_range'      => $db->query_expected_price_range($stock_code),
+            'historical_prices'         => $db->query_historical_prices($stock_code),
         );
         
         // generate report components
@@ -66,6 +67,7 @@
         include 'report/capital_structure_summary_data.php';
         include 'report/expected_roe_range_data.php';
         include 'report/expected_price_range_data.php';
+        include 'report/historical_prices_chart.php';
     ?>
 </head>
 <body id="dt_example">
@@ -178,6 +180,8 @@
         <div id="expected_roe_range_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
         <div id="expected_price_range_data_div" style="width:600px;"></div>
+        <div class="spacer"></div>
+        <div id="historical_prices_chart_div" style="width:600px; height:400px;"></div>
         <div class="spacer"></div>
     </div>
     

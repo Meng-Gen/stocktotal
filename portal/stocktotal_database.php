@@ -76,6 +76,10 @@
             return $this->db_private->query_expected_price_range($stock_code);
         }
         
+        public function query_historical_prices($stock_code) {
+            return $this->db_private->query_historical_prices($stock_code);
+        }
+        
         private $db_private;
         
     }
