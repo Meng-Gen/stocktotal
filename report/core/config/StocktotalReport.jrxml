@@ -59,9 +59,9 @@
 			<style forecolor="#FF0000"/>
 		</conditionalStyle>
 	</style>
-	<style name="negative red net_profit_minus_operating">
+	<style name="negative red operating_minus_net_profit">
 		<conditionalStyle>
-			<conditionExpression><![CDATA[$F{net_profit_minus_operating} < 0]]></conditionExpression>
+			<conditionExpression><![CDATA[$F{operating_minus_net_profit} < 0]]></conditionExpression>
 			<style forecolor="#FF0000"/>
 		</conditionalStyle>
 	</style>
@@ -197,7 +197,7 @@
 		<field name="free_cash_flow" class="java.lang.Double"/>
 		<field name="cash_flow" class="java.lang.Double"/>
 		<field name="net_profit" class="java.lang.Double"/>
-		<field name="net_profit_minus_operating" class="java.lang.Double"/>
+		<field name="operating_minus_net_profit" class="java.lang.Double"/>
 	</subDataset>
 	<subDataset name="Profit Margin Dataset" uuid="c79fd1b9-5d87-4f88-bf36-211a0c50b7cc">
 		<parameter name="STOCK_CODE" class="java.lang.String" isForPrompting="false">
@@ -1762,11 +1762,11 @@
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20">
 							<textField pattern="#,##0;-#,##0">
-								<reportElement uuid="4f6951a7-decc-49e2-a036-d84a53c00544" style="negative red net_profit_minus_operating" x="0" y="0" width="69" height="20"/>
+								<reportElement uuid="4f6951a7-decc-49e2-a036-d84a53c00544" style="negative red operating_minus_net_profit" x="0" y="0" width="69" height="20"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font isBold="false"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{net_profit_minus_operating}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{operating_minus_net_profit}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
