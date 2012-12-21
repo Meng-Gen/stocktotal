@@ -10,20 +10,24 @@ class GeneratorManager():
         self.PDFBOX_CMDLINE = '''java -jar pdfbox-app-1.7.1.jar PDFToImage ../report/StocktotalReport-%s.pdf -imageType png'''
         
     def generate(self, stocks, type):
+        cwd = os.getcwd()
+    
         for stock in stocks:
+            os.chdir(cwd)
+            
             # always generate pdf
             os.chdir(self.REPORT_WORKING_DIR)
             report_cmdline = self.REPORT_CMDLINE % stock
             os.system(report_cmdline)
             
             # convert to other type if necessary
-            os.chdir(self.PDFBOX_WORKING_DIR)
             if type in ['png']:
+                os.chdir(self.PDFBOX_WORKING_DIR)
                 pdfbox_cmdline = self.PDFBOX_CMDLINE % stock
                 print(pdfbox_cmdline)
                 os.system(pdfbox_cmdline)
-            
 
+                
             
 def main():
     import argparse
