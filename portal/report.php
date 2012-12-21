@@ -6,9 +6,9 @@
         @import "./css/demo_table.css";
     </style>
     <?php
-        include 'stocktotal_database.php';
-        include 'amchart_glue.php';
-        include 'datatables_glue.php';
+        include_once 'stocktotal_database.php';
+        include_once 'amchart_glue.php';
+        include_once 'datatables_glue.php';
 
         $DEFAULT_STOCK_CODE = '2330';
 
@@ -41,33 +41,33 @@
         );
 
         // generate report components
-        include 'report/roe_chart.php';
-        include 'report/roe_data.php';
-        include 'report/financial_structure_chart.php';
-        include 'report/financial_structure_data.php';
-        include 'report/current_and_rapid_ratio_chart.php';
-        include 'report/current_and_rapid_ratio_data.php';
-        include 'report/nonoperating_income_chart.php';
-        include 'report/nonoperating_income_data.php';
-        include 'report/long_term_investments_chart.php';
-        include 'report/long_term_investments_data.php';
-        include 'report/operating_income_ma_chart.php';
-        include 'report/operating_income_yoy_chart.php';
-        include 'report/operating_income_acc_yoy_chart.php';
-        include 'report/operating_income_data.php';
-        include 'report/profit_margin_chart.php';
-        include 'report/profit_margin_data.php';
-        include 'report/cash_flow_chart.php';
-        include 'report/cash_flow_data.php';
-        include 'report/ccc_chart.php';
-        include 'report/ccc_data.php';
-        include 'report/evaluation_index_data.php';
-        include 'report/stock_dividend_data.php';
-        include 'report/capital_structure_summary_chart.php';
-        include 'report/capital_structure_summary_data.php';
-        include 'report/expected_roe_range_data.php';
-        include 'report/expected_price_range_data.php';
-        include 'report/historical_prices_chart.php';
+        include_once 'report/roe_chart.php';
+        include_once 'report/roe_data.php';
+        include_once 'report/financial_structure_chart.php';
+        include_once 'report/financial_structure_data.php';
+        include_once 'report/current_and_rapid_ratio_chart.php';
+        include_once 'report/current_and_rapid_ratio_data.php';
+        include_once 'report/nonoperating_income_chart.php';
+        include_once 'report/nonoperating_income_data.php';
+        include_once 'report/long_term_investments_chart.php';
+        include_once 'report/long_term_investments_data.php';
+        include_once 'report/operating_income_ma_chart.php';
+        include_once 'report/operating_income_yoy_chart.php';
+        include_once 'report/operating_income_acc_yoy_chart.php';
+        include_once 'report/operating_income_data.php';
+        include_once 'report/profit_margin_chart.php';
+        include_once 'report/profit_margin_data.php';
+        include_once 'report/cash_flow_chart.php';
+        include_once 'report/cash_flow_data.php';
+        include_once 'report/ccc_chart.php';
+        include_once 'report/ccc_data.php';
+        include_once 'report/evaluation_index_data.php';
+        include_once 'report/stock_dividend_data.php';
+        include_once 'report/capital_structure_summary_chart.php';
+        include_once 'report/capital_structure_summary_data.php';
+        include_once 'report/expected_roe_range_data.php';
+        include_once 'report/expected_price_range_data.php';
+        include_once 'report/historical_prices_chart.php';
     ?>
 </head>
 <body id="dt_example">
