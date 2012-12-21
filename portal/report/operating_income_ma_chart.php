@@ -4,7 +4,7 @@
         chart.dataProvider = <?php echo amchart_encode($dataset['operating_income']); ?>;
         chart.categoryField = "date";
         chart.addTitle("Moving Average Analysis");
-       
+
         var categoryAxis = chart.categoryAxis;
         categoryAxis.parseDates = true;
         categoryAxis.minPeriod = "DD";
@@ -23,7 +23,7 @@
         graph1.title = "MA3";
         graph1.lineThickness = 2;
         chart.addGraph(graph1);
-        
+
         var graph2 = new AmCharts.AmGraph();
         graph2.valueAxis = valueAxis; 
         graph2.valueField = "ma12_income";
@@ -38,15 +38,15 @@
         graph3.type = "column";
         graph3.hidden = true; 
         chart.addGraph(graph3);
-        
+
         chartCursor = new AmCharts.ChartCursor();
         chartCursor.cursorPosition = "mouse";
         chart.addChartCursor(chartCursor);
-        
+
         var legend = new AmCharts.AmLegend();
         legend.marginLeft = 110;
         chart.addLegend(legend);
 
         chart.write("operating_income_ma_chart_div");
     });
-</script>   
+</script>

@@ -11,6 +11,6 @@
             "bPaginate": false,
             "bSort": false,
             "bInfo": false,
-        } );	
+        } );
     } );
 </script>

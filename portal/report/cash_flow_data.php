@@ -16,6 +16,6 @@
             "bPaginate": false,
             "aaSorting": [ [0,'desc'], ],
             "oSearch": {"sSearch": "-12"} // search for yearly data
-        } );	
+        } );
     } );
 </script>

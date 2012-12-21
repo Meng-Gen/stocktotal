@@ -9,16 +9,16 @@
         include 'stocktotal_database.php';
         include 'amchart_glue.php';
         include 'datatables_glue.php';
-        
+
         $DEFAULT_STOCK_CODE = '2330';
-        
+
         // parse and check stock code
-        $stock_code = (empty($_POST['stock_code'])) ? $DEFAULT_STOCK_CODE : $_POST['stock_code']; 
+        $stock_code = (empty($_POST['stock_code'])) ? $DEFAULT_STOCK_CODE : $_POST['stock_code'];
         if ((strlen($stock_code) > 10) || (!ctype_digit($stock_code))) {
             echo "<center><h1>Please input valid stock code (No SQL injection!)</h1></center>";
             return;
         }
-        
+
         // get datasets
         $db = new StocktotalDatabase('postgres');
         $dataset = array(
@@ -39,10 +39,10 @@
             'expected_price_range'      => $db->query_expected_price_range($stock_code),
             'historical_prices'         => $db->query_historical_prices($stock_code),
         );
-        
+
         // generate report components
-        include 'report/roe_chart.php'; 
-        include 'report/roe_data.php'; 
+        include 'report/roe_chart.php';
+        include 'report/roe_data.php';
         include 'report/financial_structure_chart.php';
         include 'report/financial_structure_data.php';
         include 'report/current_and_rapid_ratio_chart.php';
@@ -73,14 +73,14 @@
 <body id="dt_example">
     <div id="container">
         <div class="full_width big">Stocktotal Analysis: <?php echo $stock_code; ?></div>
-        
+
         <h1>Taiwan Stock Code (Default: <?php echo $DEFAULT_STOCK_CODE; ?>)</h1>
         <p></p>
         <form action="report.php" method="post">
             <input type="text" name="stock_code" value="" />
             <input type="submit" name="submit" value="Submit" />
         </form>
-        
+
         <h1>ROE Analysis</h1>
         <p>
             There are three components in the calculation of ROE: the net profit margin, the asset turnover, and the equity multiplier.
@@ -89,7 +89,7 @@
         <div class="spacer"></div>
         <div id="roe_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
-        
+
         <h1>Financial Structure Analysis</h1>
         <p>
             The equity ratio should be larger than 50%.
@@ -98,7 +98,7 @@
         <div class="spacer"></div>
         <div id="financial_structure_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
-        
+
         <h1>Current/Rapid Ratio Analysis</h1>
         <p>
             The current ratio should be larger than 1. 
@@ -108,21 +108,21 @@
         <div class="spacer"></div>
         <div id="current_and_rapid_ratio_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
-        
+
         <h1>Non-operating Income Analysis</h1>
         <p></p>
         <div id="nonoperating_income_chart_div" style="width:600px; height:400px;"></div>
         <div class="spacer"></div>        
         <div id="nonoperating_income_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
-        
+
         <h1>Long-term Investments Analysis</h1>
         <p></p>
         <div id="long_term_investments_chart_div" style="width:600px; height:400px;"></div>
         <div class="spacer"></div>
         <div id="long_term_investments_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
-        
+
         <h1>Operating Income Analysis</h1>
         <p></p>
         <div id="operating_income_ma_chart_div" style="width:600px; height:400px;"></div>
@@ -133,21 +133,21 @@
         <div class="spacer"></div>
         <div id="operating_income_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
-        
+
         <h1>Profit Margin Analysis</h1>
         <p></p>
         <div id="profit_margin_chart_div" style="width:600px; height:400px;"></div>
         <div class="spacer"></div>
         <div id="profit_margin_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
-        
+
         <h1>Cash Flow Analysis</h1>
         <p></p>
         <div id="cash_flow_chart_div" style="width:600px; height:400px;"></div>
         <div class="spacer"></div>
         <div id="cash_flow_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
-        
+
         <h1>Cash Conversion Cycle Analysis</h1>
         <p>
             The cash conversion cycle (CCC) measures how long a firm will be deprived of cash if it increases its investment in resources in order to expand customer sales.  
@@ -157,7 +157,7 @@
         <div class="spacer"></div>
         <div id="ccc_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
-        
+
         <h1>Evaluation Index Analysis</h1>
         <p></p>
         <div id="evaluation_index_data_div" style="width:600px;"></div>
@@ -167,7 +167,7 @@
         <p></p>
         <div id="stock_dividend_data_div" style="width:600px;"></div>
         <div class="spacer"></div>
-        
+
         <h1>Capital Structure Summary</h1>
         <p></p>
         <div id="capital_structure_summary_chart_div" style="width:600px; height:400px;"></div>
@@ -184,7 +184,7 @@
         <div id="historical_prices_chart_div" style="width:600px; height:400px;"></div>
         <div class="spacer"></div>
     </div>
-    
+
     <div id="footer" class="clear" style="text-align:center;">
         Stocktotal Report Portal designed and created by Meng-Gen &copy; 2012<br><br>
     </div>

@@ -4,7 +4,7 @@
         chart.dataProvider = <?php echo amchart_encode($dataset['current_and_rapid_ratio']); ?>;
         chart.categoryField = "date";
         chart.addTitle("Current/Rapid Ratio Analysis");
-       
+
         var categoryAxis = chart.categoryAxis;
         categoryAxis.parseDates = true;
         categoryAxis.minPeriod = "DD";
@@ -23,14 +23,14 @@
         guide1.inside = true;
         guide1.lineAlpha = 1;
         valueAxis.addGuide(guide1);
-        
+
         var guide2 = new AmCharts.Guide();
         guide2.value = 1;
         guide2.dashLength = 4;
         guide2.inside = true;
         guide2.lineAlpha = 1;
         valueAxis.addGuide(guide2);
-        
+
         var graph1 = new AmCharts.AmGraph();
         graph1.valueAxis = valueAxis;
         graph1.valueField = "current_ratio";
@@ -46,15 +46,15 @@
         graph2.bullet = "triangleUp";
         graph2.hideBulletsCount = 30;
         chart.addGraph(graph2);
-        
+
         chartCursor = new AmCharts.ChartCursor();
         chartCursor.cursorPosition = "mouse";
         chart.addChartCursor(chartCursor);
-        
+
         var legend = new AmCharts.AmLegend();
         legend.marginLeft = 110;
         chart.addLegend(legend);
 
         chart.write("current_and_rapid_ratio_chart_div");
     });
-</script>   
+</script>

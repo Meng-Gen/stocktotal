@@ -4,7 +4,7 @@
         chart.dataProvider = <?php echo amchart_encode($dataset['profit_margin']); ?>;
         chart.categoryField = "date";
         chart.addTitle("Profit Margin Analysis");
-       
+
         var categoryAxis = chart.categoryAxis;
         categoryAxis.parseDates = true;
         categoryAxis.minPeriod = "DD";
@@ -32,7 +32,7 @@
         graph2.bullet = "triangleUp";
         graph2.hideBulletsCount = 30;
         chart.addGraph(graph2);
-        
+
         var graph3 = new AmCharts.AmGraph();
         graph3.valueAxis = valueAxis; 
         graph3.valueField = "net_profit_margin";
@@ -42,15 +42,15 @@
         graph3.lineAlpha = 1;
         graph3.fillAlphas = 0.1;
         chart.addGraph(graph3);
-        
+
         chartCursor = new AmCharts.ChartCursor();
         chartCursor.cursorPosition = "mouse";
         chart.addChartCursor(chartCursor);
-        
+
         var legend = new AmCharts.AmLegend();
         legend.marginLeft = 110;
         chart.addLegend(legend);
 
         chart.write("profit_margin_chart_div");
     });
-</script>   
+</script>

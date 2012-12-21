@@ -4,7 +4,7 @@
         chart.dataProvider = <?php echo amchart_encode($dataset['nonoperating_income']); ?>;
         chart.categoryField = "date";
         chart.addTitle("Non-operating Income Analysis");
-       
+
         var categoryAxis = chart.categoryAxis;
         categoryAxis.parseDates = true;
         categoryAxis.minPeriod = "DD";
@@ -24,15 +24,15 @@
         graph.bullet = "round";
         graph.hideBulletsCount = 30;
         chart.addGraph(graph);
-        
+
         chartCursor = new AmCharts.ChartCursor();
         chartCursor.cursorPosition = "mouse";
         chart.addChartCursor(chartCursor);
-        
+
         var legend = new AmCharts.AmLegend();
         legend.marginLeft = 110;
         chart.addLegend(legend);
 
         chart.write("nonoperating_income_chart_div");
     });
-</script>   
+</script>

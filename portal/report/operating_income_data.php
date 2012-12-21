@@ -8,10 +8,10 @@
                 { "sTitle": "Income", "sClass": "center" },
                 { "sTitle": "Income YoY", "sClass": "center" },
                 { "sTitle": "Acc. Income", "sClass": "center" },
-                { "sTitle": "Acc. Income YoY", "sClass": "center" },                               
+                { "sTitle": "Acc. Income YoY", "sClass": "center" },
             ],
             "bFilter": false,
             "aaSorting": [ [0,'desc'], ],
-        } );	
+        } );
     } );
 </script>

@@ -4,7 +4,7 @@
         chart.dataProvider = <?php echo amchart_encode($dataset['financial_structure']); ?>;
         chart.categoryField = "date";
         chart.addTitle("Financial Structure Analysis");
-       
+
         var categoryAxis = chart.categoryAxis;
         categoryAxis.parseDates = true;
         categoryAxis.minPeriod = "DD";
@@ -29,8 +29,7 @@
         guide1.inside = true;
         guide1.lineAlpha = 1;
         primaryValueAxis.addGuide(guide1);
-        
-        // equity ratio graph
+
         var graph1 = new AmCharts.AmGraph();
         graph1.valueAxis = primaryValueAxis;
         graph1.valueField = "equity_ratio";
@@ -39,7 +38,6 @@
         graph1.hideBulletsCount = 30;
         chart.addGraph(graph1);
 
-        // liabilities ratio graph
         var graph2 = new AmCharts.AmGraph();
         graph2.valueAxis = primaryValueAxis; 
         graph2.valueField = "liabilities_ratio";
@@ -47,8 +45,7 @@
         graph2.bullet = "triangleUp";
         graph2.hideBulletsCount = 30;
         chart.addGraph(graph2);
-        
-        // equity multiplier graph                
+
         var graph3 = new AmCharts.AmGraph();
         graph3.valueAxis = secondaryValueAxis;
         graph3.valueField = "equity_multiplier";
@@ -56,15 +53,15 @@
         graph3.bullet = "square";
         graph3.hideBulletsCount = 30;
         chart.addGraph(graph3);
-        
+
         chartCursor = new AmCharts.ChartCursor();
         chartCursor.cursorPosition = "mouse";
         chart.addChartCursor(chartCursor);
-        
+
         var legend = new AmCharts.AmLegend();
         legend.marginLeft = 110;
         chart.addLegend(legend);
 
         chart.write("financial_structure_chart_div");
     });
-</script>   
+</script>

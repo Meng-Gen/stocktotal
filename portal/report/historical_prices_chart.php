@@ -4,7 +4,7 @@
         chart.dataProvider = <?php echo amchart_encode($dataset['historical_prices']); ?>;
         chart.categoryField = "date";
         chart.addTitle("Historical Prices");
-       
+
         var categoryAxis = chart.categoryAxis;
         categoryAxis.parseDates = true;
         categoryAxis.minPeriod = "DD";
@@ -16,7 +16,7 @@
         valueAxis.axisThickness = 2;
         valueAxis.gridAlpha = 0;
         chart.addValueAxis(valueAxis);
-       
+
         var graph1 = new AmCharts.AmGraph();
         graph1.valueAxis = valueAxis;
         graph1.valueField = "close";
@@ -32,15 +32,15 @@
         graph2.bullet = "triangleUp";
         graph2.hideBulletsCount = 30;
         chart.addGraph(graph2);
-        
+
         chartCursor = new AmCharts.ChartCursor();
         chartCursor.cursorPosition = "mouse";
         chart.addChartCursor(chartCursor);
-        
+
         var legend = new AmCharts.AmLegend();
         legend.marginLeft = 110;
         chart.addLegend(legend);
 
         chart.write("historical_prices_chart_div");
     });
-</script>   
+</script>

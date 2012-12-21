@@ -4,7 +4,7 @@
         chart.dataProvider = <?php echo amchart_encode($dataset['ccc']); ?>;
         chart.categoryField = "date";
         chart.addTitle("Cash Conversion Cycle Analysis");
-       
+
         var categoryAxis = chart.categoryAxis;
         categoryAxis.parseDates = true;
         categoryAxis.minPeriod = "DD";
@@ -22,7 +22,7 @@
         secondaryValueAxis.axisThickness = 2;
         secondaryValueAxis.gridAlpha = 0;
         chart.addValueAxis(secondaryValueAxis);
-       
+
         var graph1 = new AmCharts.AmGraph();
         graph1.valueAxis = primaryValueAxis;
         graph1.valueField = "days_inventory_outstanding";
@@ -46,7 +46,7 @@
         graph3.bullet = "triangleDown";
         graph3.hideBulletsCount = 30;
         chart.addGraph(graph3);
-        
+
         var graph4 = new AmCharts.AmGraph();
         graph4.valueAxis = secondaryValueAxis;
         graph4.valueField = "ccc";
@@ -56,11 +56,11 @@
         graph4.lineAlpha = 1;
         graph4.fillAlphas = 0.1;
         chart.addGraph(graph4);
-        
+
         chartCursor = new AmCharts.ChartCursor();
         chartCursor.cursorPosition = "mouse";
         chart.addChartCursor(chartCursor);
-        
+
         var legend = new AmCharts.AmLegend();
         legend.marginLeft = 110;
         chart.addLegend(legend);
