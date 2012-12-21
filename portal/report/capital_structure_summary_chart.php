@@ -13,39 +13,36 @@
         categoryAxis.axisColor = "#DADADA";
 
         var valueAxis = new AmCharts.ValueAxis();
-        valueAxis.axisThickness = 2;
-        valueAxis.gridAlpha = 0;
+        valueAxis.title = "percent"; // this line makes the chart "stacked"
+        valueAxis.stackType = "100%";
+        valueAxis.gridAlpha = 0.07;
         chart.addValueAxis(valueAxis);
-
-        var guide1 = new AmCharts.Guide();
-        guide1.value = 0.5;
-        guide1.dashLength = 4;
-        guide1.inside = true;
-        guide1.lineAlpha = 1;
-        valueAxis.addGuide(guide1);
-        
+       
         var graph1 = new AmCharts.AmGraph();
         graph1.valueAxis = valueAxis;
-        graph1.valueField = "spo_ratio";
-        graph1.title = "SPO Ratio";
-        graph1.bullet = "round";
-        graph1.hideBulletsCount = 30;
+        graph1.valueField = "spo";
+        graph1.title = "SPO";
+        graph1.balloonText = "[[value]] ([[percents]]%)";
+        graph1.lineAlpha = 0;
+        graph1.fillAlphas = 0.6;
         chart.addGraph(graph1);
 
         var graph2 = new AmCharts.AmGraph();
         graph2.valueAxis = valueAxis; 
-        graph2.valueField = "capitalization_earnings_ratio";
-        graph2.title = "Cap. Earnings Ratio";
-        graph2.bullet = "triangleUp";
-        graph2.hideBulletsCount = 30;
+        graph2.valueField = "capitalization_earnings";
+        graph2.title = "Cap. Earnings";
+        graph2.balloonText = "[[value]] ([[percents]]%)";
+        graph2.lineAlpha = 0;
+        graph2.fillAlphas = 0.6;
         chart.addGraph(graph2);
         
         var graph3 = new AmCharts.AmGraph();
         graph3.valueAxis = valueAxis; 
-        graph3.valueField = "capitalization_reserve_and_others_ratio";
-        graph3.title = "Cap. Reserve and Others Ratio";
-        graph3.bullet = "square";
-        graph3.hideBulletsCount = 30;
+        graph3.valueField = "capitalization_reserve_and_others";
+        graph3.title = "Cap. Reserve and Others";
+        graph3.balloonText = "[[value]] ([[percents]]%)";
+        graph3.lineAlpha = 0;
+        graph3.fillAlphas = 0.6;
         chart.addGraph(graph3);
         
         chartCursor = new AmCharts.ChartCursor();
