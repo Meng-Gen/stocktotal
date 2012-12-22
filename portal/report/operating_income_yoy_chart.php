@@ -28,20 +28,20 @@
         guide1.dashLength = 4;
         guide1.inside = true;
         guide1.lineAlpha = 2;
-        primaryValueAxis.addGuide(guide1);
+        secondaryValueAxis.addGuide(guide1);
 
         var graph1 = new AmCharts.AmGraph();
         graph1.valueAxis = secondaryValueAxis; 
         graph1.valueField = "income_yoy";
         graph1.title = "YoY";
-        graph1.lineThickness = 2;
+        graph1.type = "column";
         chart.addGraph(graph1);
 
         var graph2 = new AmCharts.AmGraph();
         graph2.valueAxis = primaryValueAxis;
         graph2.valueField = "income";
         graph2.title = "Operating Income";
-        graph2.type = "column";
+        graph2.lineThickness = 2;
         chart.addGraph(graph2);
 
         chartCursor = new AmCharts.ChartCursor();
