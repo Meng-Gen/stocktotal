@@ -721,7 +721,7 @@ ALTER FUNCTION public.financial_structure(stock_code text) OWNER TO stocktotal;
 
 CREATE FUNCTION long_term_investments(stock_code text) RETURNS TABLE(activity_date date, long_term_investments double precision, assets double precision, long_term_investments_ratio double precision)
     LANGUAGE sql
-    AS $$
+    AS $_$
 with T as
 (
     select
@@ -738,7 +738,7 @@ with T as
             from
                 BalanceSheet 
             where 
-                stock_code = '3587' 
+                stock_code = $1
                 and report_type = 'C'
                 and item = '資產總計'
         ) as A
@@ -751,7 +751,7 @@ with T as
             from
                 BalanceSheet 
             where 
-                stock_code = '3587' 
+                stock_code = $1
                 and report_type = 'C'
                 and item in ('長期投資合計', '基金及投資')
         ) as B
@@ -775,7 +775,7 @@ where
     and T.report_date = U.report_date
     and T.assets != 0
 order by T.activity_date
-$$;
+$_$;
 
 
 ALTER FUNCTION public.long_term_investments(stock_code text) OWNER TO stocktotal;
