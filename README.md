@@ -12,7 +12,8 @@ Introduction
     * Report: generate pdf/png report
     * Portal: generate web portal report
 
-    
+--------------------------------------------------------------------------------
+
 Environment
 -----------
 
@@ -33,6 +34,7 @@ Source module is required if your database is empty.
 * Apache2 
 * PHP 5.3 (or higher)
 
+--------------------------------------------------------------------------------
 
 Prerequirement
 --------------
@@ -55,6 +57,7 @@ For license issue, we need to prepare the following required jar files:
 
 * PHP 5 pdo driver for PostgreSQL
 
+--------------------------------------------------------------------------------
 
 Deployment
 ----------
@@ -77,8 +80,9 @@ Deployment
 
 ### Portal module
 
-* Copy `$HOME_DIR/portal` to Apache2 `htdocs` directory
+* Copy `$HOME_DIR/portal` to Apache2 htdocs directory
 
+--------------------------------------------------------------------------------
 
 Executing
 ---------
@@ -88,6 +92,7 @@ Executing
 3.   Report module: we need to build first: `$HOME_DIR/report/builder_manager.py`.  To generate report, execute `$HOME_DIR/report/generator_manager.py -h` for usage.
 4.   Portal module: open web browser and browse `http://localhost/portal/report.php`
 
+--------------------------------------------------------------------------------
 
 Questions
 ---------
