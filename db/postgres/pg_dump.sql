@@ -716,6 +716,143 @@ $_$;
 ALTER FUNCTION public.financial_structure(stock_code text) OWNER TO stocktotal;
 
 --
+-- Name: latest_expected_roe(text); Type: FUNCTION; Schema: public; Owner: stocktotal
+--
+
+CREATE FUNCTION latest_expected_roe(stock_code text) RETURNS TABLE(latest_expected_roe double precision, latest_close double precision, latest_roe double precision, latest_book_value double precision)
+    LANGUAGE sql
+    AS $_$
+select 
+    X.latest_roe / X.latest_close * Y.latest_book_value as latest_expected_roe,
+    X.latest_close, 
+    X.latest_roe, 
+    Y.latest_book_value
+from
+(
+    select 
+        A.latest_close, 
+        B.latest_roe
+    from 
+    (
+        select close as latest_close from HistoricalPrices 
+        where stock_code = $1 and activity_date in 
+        (
+            select max(activity_date) from HistoricalPrices where stock_code = $1
+        )
+    ) as A,
+    (
+        with Roe as 
+        (
+            select activity_date, roe from roe($1)
+        )
+        select roe as latest_roe from Roe 
+        where activity_date in 
+        (
+            select max(activity_date) from Roe
+        )
+    ) as B
+) as X,
+(
+    with BookValue as 
+    (
+        with T as
+        (
+            select 
+                P.activity_date, 
+                P.report_date, 
+                P.equity,
+                P.common_stock_capital,
+                coalesce(Q.preferred_stock_capital, 0) as preferred_stock_capital
+            from 
+                (
+                    select
+                        A.activity_date,
+                        A.report_date,
+                        A.number as equity,
+                        B.number as common_stock_capital
+                    from
+                        BalanceSheet as A,
+                        BalanceSheet as B
+                    where
+                        A.stock_code = B.stock_code
+                        and A.activity_date = B.activity_date
+                        and A.report_date = B.report_date
+                        and A.item = '股東權益總計'
+                        and B.item = '普通股股本'
+                        and A.report_type = 'C'
+                        and B.report_type = 'C'
+                        and A.stock_code = $1
+                        and A.number != 0
+                        and B.number != 0
+                ) as P
+            left join
+                (
+                    select
+                        activity_date,
+                        report_date,
+                        sum(number) as preferred_stock_capital
+                    from BalanceSheet
+                    where
+                        report_type = 'C'
+                        and stock_code = $1
+                        and item in ('少數股權')
+                    group by activity_date, report_date
+                ) as Q
+            on 
+                P.activity_date = Q.activity_date 
+                and P.report_date = Q.report_date
+        )
+        select
+            T.activity_date,
+            (T.equity - T.preferred_stock_capital)/T.common_stock_capital * 10 as book_value
+        from
+            T,
+            (
+                select activity_date, max(report_date) as report_date from T
+                group by activity_date
+            ) as U
+        where
+            T.activity_date = U.activity_date
+            and T.report_date = U.report_date
+    )
+    select book_value as latest_book_value from BookValue where activity_date in 
+    (
+        select max(activity_date) from BookValue
+    )
+) as Y
+$_$;
+
+
+ALTER FUNCTION public.latest_expected_roe(stock_code text) OWNER TO stocktotal;
+
+--
+-- Name: latest_stock_code_with_max_income(); Type: FUNCTION; Schema: public; Owner: stocktotal
+--
+
+CREATE FUNCTION latest_stock_code_with_max_income() RETURNS SETOF text
+    LANGUAGE sql
+    AS $$
+    select stock_code from
+    (
+        select X.stock_code, max(Y.activity_date) as max_income_date
+       	from
+        (
+            select stock_code, max(income) as max_income 
+            from OperatingIncome
+            group by stock_code
+        ) as X,
+        OperatingIncome as Y
+        where X.max_income = Y.income and X.stock_code = Y.stock_code
+        group by X.stock_code
+    ) as Z
+    where Z.max_income_date in (select max(activity_date) as latest_date from OperatingIncome)
+order by stock_code
+$$;
+
+
+ALTER FUNCTION public.latest_stock_code_with_max_income() OWNER TO stocktotal;
+
+--
 -- Name: long_term_investments(text); Type: FUNCTION; Schema: public; Owner: stocktotal
 --
 
