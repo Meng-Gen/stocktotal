@@ -716,6 +716,20 @@ $_$;
 ALTER FUNCTION public.financial_structure(stock_code text) OWNER TO stocktotal;
 
 --
+-- Name: init_stocktotaldashboard(); Type: FUNCTION; Schema: public; Owner: stocktotal
+--
+
+CREATE FUNCTION init_stocktotaldashboard() RETURNS void
+    LANGUAGE sql
+    AS $$
+insert into StocktotalDashboard(stock_code)
+select code from StockCode where cfi_code = 'ESVUFR' except (select stock_code from StocktotalDashboard)
+$$;
+
+
+ALTER FUNCTION public.init_stocktotaldashboard() OWNER TO stocktotal;
+
+--
 -- Name: latest_expected_roe(text); Type: FUNCTION; Schema: public; Owner: stocktotal
 --
 
@@ -824,33 +838,6 @@ $_$;
 
 
 ALTER FUNCTION public.latest_expected_roe(stock_code text) OWNER TO stocktotal;
-
---
--- Name: latest_stock_code_with_max_income(); Type: FUNCTION; Schema: public; Owner: stocktotal
---
-
-CREATE FUNCTION latest_stock_code_with_max_income() RETURNS SETOF text
-    LANGUAGE sql
-    AS $$
-    select stock_code from
-    (
-        select X.stock_code, max(Y.activity_date) as max_income_date
-       	from
-        (
-            select stock_code, max(income) as max_income 
-            from OperatingIncome
-            group by stock_code
-        ) as X,
-        OperatingIncome as Y
-        where X.max_income = Y.income and X.stock_code = Y.stock_code
-        group by X.stock_code
-    ) as Z
-    where Z.max_income_date in (select max(activity_date) as latest_date from OperatingIncome)
-order by stock_code
-$$;
-
-
-ALTER FUNCTION public.latest_stock_code_with_max_income() OWNER TO stocktotal;
 
 --
 -- Name: long_term_investments(text); Type: FUNCTION; Schema: public; Owner: stocktotal
@@ -1233,6 +1220,175 @@ $_$;
 
 ALTER FUNCTION public.stock_dividend(stock_code text) OWNER TO stocktotal;
 
+--
+-- Name: update_stocktotaldashboard(); Type: FUNCTION; Schema: public; Owner: stocktotal
+--
+
+CREATE FUNCTION update_stocktotaldashboard() RETURNS void
+    LANGUAGE sql
+    AS $_$
+-- expected_roe
+DO $$DECLARE r record;
+BEGIN
+    FOR r IN select stock_code from StocktotalDashboard
+    LOOP
+        update StocktotalDashboard set expected_roe = T.latest_expected_roe
+        from 
+        (
+            select latest_expected_roe from latest_expected_roe(r.stock_code)
+        ) as T
+        where stock_code = r.stock_code;
+    END LOOP;
+END$$;
+
+-- max_income_activity_date
+DO $$DECLARE r record;
+BEGIN
+    FOR r IN select stock_code from StocktotalDashboard
+    LOOP
+        update StocktotalDashboard set max_income_activity_date = T.activity_date
+        from 
+        (
+            select max(activity_date) as activity_date from OperatingIncome
+            where income in 
+            (
+                select max(income) from OperatingIncome where stock_code = r.stock_code
+            )
+        ) as T
+        where stock_code = r.stock_code;
+    END LOOP;
+END$$;
+
+-- continuous_growth_month_count
+DO $$DECLARE r record;
+BEGIN
+    FOR r IN select stock_code from StocktotalDashboard
+    LOOP
+        update StocktotalDashboard set continuous_growth_month_count = T.count
+        from 
+        (
+            with GrowthFlag as 
+            (
+                select 
+                    activity_date, 
+                    case when ma3_income >= ma12_income then 1 else 0 end growth_flag
+                from operating_income(r.stock_code) 
+            )
+            select count(1) as count from GrowthFlag 
+            where activity_date > (select max(activity_date) from GrowthFlag where growth_flag = 0)
+        ) as T
+        where stock_code = r.stock_code;
+    END LOOP;
+END$$;
+
+-- bad_equity_ratio and bad_equity_ratio_percentage
+DO $$DECLARE r record;
+BEGIN
+    FOR r IN select stock_code from StocktotalDashboard
+    LOOP
+        update StocktotalDashboard set 
+            bad_equity_ratio = T.bad_equity_ratio,
+            bad_equity_ratio_percentage = T.bad_equity_ratio_percentage
+        from 
+        (
+            select 
+                T.bad_equity_ratio,
+                T.bad_equity_ratio::double precision / T.total_count as bad_equity_ratio_percentage
+            from
+            (
+                with EquityRatio as (select equity_ratio from financial_structure(r.stock_code))
+                select 
+                    count(1) as total_count,
+                    sum(case when equity_ratio < 0.5 then 1 else 0 end) as bad_equity_ratio
+                from EquityRatio
+            ) as T
+        ) as T
+        where stock_code = r.stock_code;
+    END LOOP;
+END$$;
+
+-- bad_current_ratio and bad_current_ratio_percentage
+DO $$DECLARE r record;
+BEGIN
+    FOR r IN select stock_code from StocktotalDashboard
+    LOOP
+        update StocktotalDashboard set 
+            bad_current_ratio = T.bad_current_ratio,
+            bad_current_ratio_percentage = T.bad_current_ratio_percentage
+        from 
+        (
+            select 
+                T.bad_current_ratio,
+                T.bad_current_ratio::double precision / T.total_count as bad_current_ratio_percentage
+            from
+            (
+                with CurrentRatio as (select current_ratio from current_and_rapid_ratio(r.stock_code))
+                select 
+                    count(1) as total_count,
+                    sum(case when current_ratio < 1.0 then 1 else 0 end) as bad_current_ratio
+                from CurrentRatio
+            ) as T
+        ) as T
+        where stock_code = r.stock_code;
+    END LOOP;
+END$$;
+
+-- bad_rapid_ratio and bad_rapid_ratio_percentage
+DO $$DECLARE r record;
+BEGIN
+    FOR r IN select stock_code from StocktotalDashboard
+    LOOP
+        update StocktotalDashboard set 
+            bad_rapid_ratio = T.bad_rapid_ratio,
+            bad_rapid_ratio_percentage = T.bad_rapid_ratio_percentage
+        from 
+        (
+            select 
+                T.bad_rapid_ratio,
+                T.bad_rapid_ratio::double precision / T.total_count as bad_rapid_ratio_percentage
+            from
+            (
+                with RapidRatio as (select rapid_ratio from current_and_rapid_ratio(r.stock_code))
+                select 
+                    count(1) as total_count,
+                    sum(case when rapid_ratio < 2.0 then 1 else 0 end) as bad_rapid_ratio
+                from RapidRatio
+            ) as T
+        ) as T
+        where stock_code = r.stock_code;
+    END LOOP;
+END$$;
+
+-- bad_dividend and bad_dividend_percentage
+DO $$DECLARE r record;
+BEGIN
+    FOR r IN select stock_code from StocktotalDashboard
+    LOOP
+        update StocktotalDashboard set 
+            bad_dividend = T.bad_dividend,
+            bad_dividend_percentage = T.bad_dividend_percentage
+        from 
+        (
+            select 
+                T.bad_dividend,
+                T.bad_dividend::double precision / T.total_count as bad_dividend_percentage
+            from
+            (
+                with StockDividend as (select total_dividend from stock_dividend(r.stock_code))
+                select 
+                    count(1) as total_count,
+                    sum(case when total_dividend = 0 then 1 else 0 end) as bad_dividend
+                from StockDividend
+            ) as T
+        ) as T
+        where stock_code = r.stock_code;
+    END LOOP;
+END$$;
+$_$;
+
+
+ALTER FUNCTION public.update_stocktotaldashboard() OWNER TO stocktotal;
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -1469,6 +1625,28 @@ CREATE TABLE stockdividend (
 ALTER TABLE public.stockdividend OWNER TO stocktotal;
 
 --
+-- Name: stocktotaldashboard; Type: TABLE; Schema: public; Owner: stocktotal; Tablespace: 
+--
+
+CREATE TABLE stocktotaldashboard (
+    stock_code text NOT NULL,
+    expected_roe double precision,
+    max_income_activity_date date,
+    continuous_growth_month_count integer,
+    bad_equity_ratio integer,
+    bad_equity_ratio_percentage double precision,
+    bad_current_ratio integer,
+    bad_current_ratio_percentage double precision,
+    bad_rapid_ratio integer,
+    bad_rapid_ratio_percentage double precision,
+    bad_dividend integer,
+    bad_dividend_percentage double precision
+);
+
+
+ALTER TABLE public.stocktotaldashboard OWNER TO stocktotal;
+
+--
 -- Name: tradingsummary; Type: TABLE; Schema: public; Owner: stocktotal; Tablespace: 
 --
 
@@ -1578,6 +1756,14 @@ ALTER TABLE ONLY stockcode
 
 ALTER TABLE ONLY stockdividend
     ADD CONSTRAINT stockdividend_stock_code_activity_date_key UNIQUE (stock_code, activity_date);
+
+
+--
+-- Name: stocktotaldashboard_stock_code_key; Type: CONSTRAINT; Schema: public; Owner: stocktotal; Tablespace: 
+--
+
+ALTER TABLE ONLY stocktotaldashboard
+    ADD CONSTRAINT stocktotaldashboard_stock_code_key UNIQUE (stock_code);
 
 
 --
