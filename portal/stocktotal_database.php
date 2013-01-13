@@ -80,6 +80,10 @@
             return $this->db_private->query_historical_prices($stock_code);
         }
 
+        public function query_stocktotal_dashboard() {
+            return $this->db_private->query_stocktotal_dashboard();
+        }
+        
         private $db_private;
 
     }
