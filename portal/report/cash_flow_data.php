@@ -13,9 +13,8 @@
                 { "sTitle": "Net Profit", "sClass": "center" },
                 { "sTitle": "Operating Minus Net Profit", "sClass": "center" },
             ],
-            "bPaginate": false,
+            "bFilter": false,
             "aaSorting": [ [0,'desc'], ],
-            "oSearch": {"sSearch": "-12"} // search for yearly data
         } );
     } );
 </script>
