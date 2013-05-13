@@ -1,0 +1,1 @@
+"C:/Program Files/PostgreSQL/9.2/bin\pg_restore.exe" --host localhost --port 5432 --username "postgres" --dbname "stocktotal" "C:\stocktotal\db\postgres\stocktotal-balancesheet.backup"

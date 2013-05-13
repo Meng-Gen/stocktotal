@@ -65,20 +65,25 @@ class OperatingIncomeBaseSource(mops_source.MopsSource):
                         date_util.get_this_month_by(date),
                         items[2].strip().replace(',','')
                     ]
+                    csv_writer.writerow(this_month_record)
+                    
                     last_month_record = [
                         date, 
                         stock_code, 
                         date_util.get_last_month_by(date),
                         items[3].strip().replace(',','')
                     ]
+                    if items[3].strip() == '不適用':
+                        self.LOGGER.debug('''Skipped record => {record}'''.format(record=last_month_record))
+                    else:
+                        csv_writer.writerow(last_month_record)
+
                     last_year_record = [
                         date, 
                         stock_code, 
                         date_util.get_last_year_by(date),
                         items[4].strip().replace(',','')
                     ]
-                    csv_writer.writerow(this_month_record)
-                    csv_writer.writerow(last_month_record)
                     csv_writer.writerow(last_year_record)
         dest_fd.close()
             
