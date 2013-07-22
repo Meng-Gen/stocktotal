@@ -56,7 +56,6 @@ class OperatingIncomeBaseSource(mops_source.MopsSource):
                         continue
 
                     items = co.xpath('./td/text()')
-                    assert len(items) is 10
                     stock_code = items[0]
 
                     this_month_record = [
